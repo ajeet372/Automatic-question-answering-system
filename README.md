@@ -1,106 +1,105 @@
-﻿# 🤖 Automatic Question Answering System
+# Automatic Question Answering System
 
-## 📌 About the Project
+An intelligent web-based Question Answering System built using Python and Flask. It allows users to ask questions and get answers through a simple and user-friendly interface.
 
-The **Automatic Question Answering System** is a Python-based application designed to answer user questions automatically.
+## 🌐 Live Project
 
-The project provides a web-based interface where users can interact with the question-answering system and receive answers to their queries.
+**Try the project here:**
 
-## ✨ Project Features
+[Automatic Question Answering System](https://automatic-question-answering-system.onrender.com/)
 
-- Automatic Question Answering
-- Web-based User Interface
-- Python Backend
-- HTML Templates
-- JavaScript Integration
-- Data Storage using JSON and SQLite
-- Static Assets and Resources
-- Admin Interface
+## 🚀 Features
+
+- User-friendly web interface
+- Automatic question answering
+- Flask-based web application
+- PDF file support
+- Local NLP-based answer functionality
+- Admin panel
+- SQLite database integration
 
 ## 🛠️ Technologies Used
 
 - Python
+- Flask
 - HTML
-- JavaScript
 - CSS
-- SQLite Database
-- JSON
+- JavaScript
+- SQLite
+- Pillow
+- PyPDF2
 
 ## 📂 Project Structure
 
 ```text
 Automatic-question-answering-system/
 │
-├── assets/          # Project assets
-├── data/            # Data files
-├── js/              # JavaScript files
-├── scratch/         # Project resources
-├── static/          # Static resources
-├── statics/         # Additional static resources
-├── templates/       # HTML templates
-│
-├── admin.html       # Admin interface
-├── app.py           # Main Python application
-├── index.html       # Main HTML page
-├── qa.db            # Question-answer database
-├── qa_data.json     # Question-answer data
-└── README.md        # Project documentation
+├── app.py
+├── requirements.txt
+├── qa.db
+├── qa_data.json
+├── templates/
+├── static/
+├── assets/
+├── data/
+└── README.md
 ```
 
-## ⚙️ Installation and Setup
+## 💻 Installation and Setup
 
-### 1. Clone the Repository
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/ajeet372/Automatic-question-answering-system.git
 ```
 
-### 2. Open Project Folder
+2. Open the project folder:
 
 ```bash
 cd Automatic-question-answering-system
 ```
 
-### 3. Create Virtual Environment (Optional)
+3. Create a virtual environment:
 
 ```bash
 python -m venv venv
 ```
 
-### 4. Activate Virtual Environment
+4. Activate the virtual environment:
 
 **Windows:**
-
 ```bash
 venv\Scripts\activate
 ```
 
-### 5. Install Dependencies
+5. Install dependencies:
 
-Install the dependencies required by the project. Check your Python imports and install the required packages.
+```bash
+pip install -r requirements.txt
+```
 
-### 6. Run the Application
+6. Run the application:
 
 ```bash
 python app.py
 ```
 
-If the application starts a local web server, open the local URL displayed in the terminal.
+7. Open your browser and visit:
 
-## 🚀 Future Improvements
+```text
+http://127.0.0.1:5000/
+```
 
-- Improve answer accuracy.
-- Add advanced AI and NLP capabilities.
-- Support multiple languages.
-- Improve user interface.
-- Add more question-answer datasets.
+## ☁️ Deployment
 
-## 👨‍💻 Author
+The project is deployed on Render.
 
-**Ajeet**
+**Live URL:** https://automatic-question-answering-system.onrender.com/
 
-GitHub: https://github.com/ajeet372
+## 👨‍💻 Developer
 
-## 📜 License
+**GitHub:** [ajeet372](https://github.com/ajeet372)
 
-This project is developed for educational purposes.
+---
+
+⭐ If you find this project useful, consider giving the repository a star!
