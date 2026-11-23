@@ -1,0 +1,438 @@
+[
+  {
+    "question": "Hindi mein aasan shabdon mein explain karo",
+    "answer": "### 📄 Screenshot / File Overview:\n\n**File:** `Screenshot_2025-12-31_120236.png` (IMAGE)\n\n**Key Points & Detected Content:**\n- CHAUDHARY RANBIR SINGH UNIVERSITY\n- PRACTICAL FILE OF PROGRAMMING WITH PYTHON\n- Submitted by :\n- Name - Ajeet kumar\n- Class. B.Tech CSE (A1 &\n- Roll no: 240140\n\n---\n*Total Lines: 8 | Characters: 174*\n*Aap is content ke kisi bhi specific topic ya line ke baare mein sawal poochh sakte hain.*"
+  },
+  {
+    "question": "Hindi mein aasan shabdon mein explain karo",
+    "answer": "### 📄 Screenshot / File Overview:\n\n**File:** `text_snippet_160917.txt` (TEXT)\n\n**Key Points & Detected Content:**\n- Python is a high-level, interpreted programming language known for its simplicity and readability. It was created by Guido van Rossum and first released in 1991.\n- Key Features of Python\n- • Easy to Learn and Read: Python syntax is simple and closely resembles plain English, making it the top choice for beginners.\n- • Interpreted Language: Code is executed line by line, which makes debugging easy and fast.\n- • Cross-Platform: Python works smoothly across different operating systems like Windows, macOS, Linux, and Unix.\n- • Large Standard Library: It comes with a vast collection of pre-written code and built-in modules to solve various problems without writing code from scratch.\n\n---\n*Total Lines: 12 | Characters: 1440*\n*Aap is content ke kisi bhi specific topic ya line ke baare mein sawal poochh sakte hain.*"
+  },
+  {
+    "question": "name of university",
+    "answer": "### 🎯 Screenshot / File se Match:\n\n> CHAUDHARY RANBIR SINGH UNIVERSITY\n\n> Chaudhary Ranbir Singh CHAUDHARY RANBIR SINGH UNIVERSITY\n\n> Chaudhary Ranbir Singh University\n\n---\n*Aapke sawal **'name of university'** ke mutabiq yeh jankari mili hai (Match Confidence: 77%).*"
+  },
+  {
+    "question": "prince",
+    "answer": "prince is a chaka"
+  },
+  {
+    "question": "naveen chahal",
+    "answer": "i am naveen chahal from julana"
+  },
+  {
+    "question": "rom rom",
+    "answer": "rom rom bro....."
+  },
+  {
+    "question": "what is python",
+    "answer": "Python is a high-level programming language."
+  },
+  {
+    "question": "what is chatbot",
+    "answer": "A chatbot is a software application that communicates with users."
+  },
+  {
+    "question": "what is artificial intelligence",
+    "answer": "Artificial Intelligence is a technology that enables computers to perform tasks that normally require human intelligence."
+  },
+  {
+    "question": "what is machine learning",
+    "answer": "Machine Learning is a branch of AI where computers learn patterns from data."
+  },
+  {
+    "question": "what is deep learning",
+    "answer": "Deep Learning is a type of machine learning that uses artificial neural networks."
+  },
+  {
+    "question": "what is programming",
+    "answer": "Programming is the process of writing instructions for a computer to perform tasks."
+  },
+  {
+    "question": "what is computer",
+    "answer": "A computer is an electronic device that processes data and performs calculations."
+  },
+  {
+    "question": "what is internet",
+    "answer": "The Internet is a global network that connects computers and devices."
+  },
+  {
+    "question": "what is software",
+    "answer": "Software is a collection of programs and instructions that tell a computer what to do."
+  },
+  {
+    "question": "what is hardware",
+    "answer": "Hardware refers to the physical components of a computer."
+  },
+  {
+    "question": "what is cpu",
+    "answer": "CPU stands for Central Processing Unit and it executes computer instructions."
+  },
+  {
+    "question": "what is gpu",
+    "answer": "GPU stands for Graphics Processing Unit and it is designed to process graphics and parallel computations."
+  },
+  {
+    "question": "what is ram",
+    "answer": "RAM is temporary memory used by a computer to store data for running programs."
+  },
+  {
+    "question": "what is rom",
+    "answer": "ROM is non-volatile memory that can retain data even when the power is turned off."
+  },
+  {
+    "question": "what is html",
+    "answer": "HTML is a markup language used to create the structure of web pages."
+  },
+  {
+    "question": "what is css",
+    "answer": "CSS is used to style and design web pages."
+  },
+  {
+    "question": "what is javascript",
+    "answer": "JavaScript is a programming language commonly used to make web pages interactive."
+  },
+  {
+    "question": "what is java",
+    "answer": "Java is a popular object-oriented programming language."
+  },
+  {
+    "question": "what is c++",
+    "answer": "C++ is a general-purpose programming language commonly used for software and system development."
+  },
+  {
+    "question": "what is a variable",
+    "answer": "A variable is a named storage location used to hold a value in a program."
+  },
+  {
+    "question": "what is a function",
+    "answer": "A function is a reusable block of code designed to perform a specific task."
+  },
+  {
+    "question": "what is a loop",
+    "answer": "A loop is used to repeatedly execute a block of code."
+  },
+  {
+    "question": "what is an array",
+    "answer": "An array is a data structure used to store multiple values in a collection."
+  },
+  {
+    "question": "what is a database",
+    "answer": "A database is an organized collection of data that can be stored and accessed efficiently."
+  },
+  {
+    "question": "what is sql",
+    "answer": "SQL is a language used to manage and query data in relational databases."
+  },
+  {
+    "question": "what is api",
+    "answer": "API stands for Application Programming Interface and allows different software systems to communicate."
+  },
+  {
+    "question": "what is json",
+    "answer": "JSON is a lightweight data format commonly used for storing and exchanging structured data."
+  },
+  {
+    "question": "what is an algorithm",
+    "answer": "An algorithm is a step-by-step procedure for solving a problem or completing a task."
+  },
+  {
+    "question": "what is debugging",
+    "answer": "Debugging is the process of finding and fixing errors in a program."
+  },
+  {
+    "question": "what is a bug",
+    "answer": "A bug is an error or unexpected behavior in a software program."
+  },
+  {
+    "question": "what is cloud computing",
+    "answer": "Cloud computing provides computing resources and services over the internet."
+  },
+  {
+    "question": "what is cybersecurity",
+    "answer": "Cybersecurity is the practice of protecting computers, networks, applications, and data from digital threats."
+  },
+  {
+    "question": "what is wifi",
+    "answer": "Wi-Fi is a wireless networking technology used to connect devices to a network."
+  },
+  {
+    "question": "what is bluetooth",
+    "answer": "Bluetooth is a short-range wireless technology used to connect electronic devices."
+  },
+  {
+    "question": "what is operating system",
+    "answer": "An operating system is software that manages computer hardware and provides services for applications."
+  },
+  {
+    "question": "what is windows",
+    "answer": "Windows is an operating system developed by Microsoft."
+  },
+  {
+    "question": "what is linux",
+    "answer": "Linux is an open-source family of operating systems based on the Linux kernel."
+  },
+  {
+    "question": "what is android",
+    "answer": "Android is a mobile operating system developed primarily for smartphones and other devices."
+  },
+  {
+    "question": "what is ios",
+    "answer": "iOS is Apple's mobile operating system for iPhone and related devices."
+  },
+  {
+    "question": "what is google",
+    "answer": "Google is a technology company known for products such as its search engine, Android, and Google Cloud."
+  },
+  {
+    "question": "what is microsoft",
+    "answer": "Microsoft is a technology company that develops software, cloud services, and other technology products."
+  },
+  {
+    "question": "what is open source",
+    "answer": "Open source software has source code that is made available under terms that allow users to inspect and often modify and redistribute it."
+  },
+  {
+    "question": "what is web development",
+    "answer": "Web development is the process of creating and maintaining websites and web applications."
+  },
+  {
+    "question": "what is frontend",
+    "answer": "Frontend is the part of a website or application that users see and interact with."
+  },
+  {
+    "question": "what is backend",
+    "answer": "Backend is the server-side part of an application that handles data, logic, and services."
+  },
+  {
+    "question": "what is full stack development",
+    "answer": "Full stack development involves working with both frontend and backend technologies."
+  },
+  {
+    "question": "what is data science",
+    "answer": "Data science uses statistics, programming, and other methods to extract useful insights from data."
+  },
+  {
+    "question": "what is data",
+    "answer": "Data is information that can be collected, stored, processed, and analyzed."
+  },
+  {
+    "question": "what is big data",
+    "answer": "Big data refers to very large or complex datasets that require specialized methods and technologies to process."
+  },
+  {
+    "question": "what is neural network",
+    "answer": "A neural network is a machine learning model inspired by the way biological neural systems process information."
+  },
+  {
+    "question": "what is natural language processing",
+    "answer": "Natural Language Processing is a field of AI that helps computers understand and process human language."
+  },
+  {
+    "question": "what is computer vision",
+    "answer": "Computer vision is a field of AI that enables computers to analyze and understand images and videos."
+  },
+  {
+    "question": "what is generative ai",
+    "answer": "Generative AI is a type of AI that can create new content such as text, images, audio, or code."
+  },
+  {
+    "question": "what is llm",
+    "answer": "LLM stands for Large Language Model, a type of AI model trained to understand and generate text."
+  },
+  {
+    "question": "what is tensorflow",
+    "answer": "TensorFlow is an open-source platform used for machine learning and numerical computation."
+  },
+  {
+    "question": "what is pytorch",
+    "answer": "PyTorch is an open-source machine learning framework widely used for research and AI development."
+  },
+  {
+    "question": "what is github",
+    "answer": "GitHub is a platform for hosting, collaborating on, and managing software projects using Git."
+  },
+  {
+    "question": "what is git",
+    "answer": "Git is a distributed version control system used to track changes in files and code."
+  },
+  {
+    "question": "what is version control",
+    "answer": "Version control is a system that tracks changes to files so developers can manage and restore different versions."
+  },
+  {
+    "question": "what is programming language",
+    "answer": "A programming language is a formal language used to write instructions that computers can execute."
+  },
+  {
+    "question": "what is object oriented programming",
+    "answer": "Object-oriented programming is a programming approach based on objects that combine data and behavior."
+  },
+  {
+    "question": "what is class",
+    "answer": "A class is a blueprint used to create objects in object-oriented programming."
+  },
+  {
+    "question": "what is object",
+    "answer": "An object is an instance of a class that contains data and behavior."
+  },
+  {
+    "question": "what is inheritance",
+    "answer": "Inheritance is an object-oriented programming feature that allows a class to derive properties and behavior from another class."
+  },
+  {
+    "question": "what is encapsulation",
+    "answer": "Encapsulation is the practice of combining data and methods and controlling access to internal details."
+  },
+  {
+    "question": "what is polymorphism",
+    "answer": "Polymorphism allows the same interface or operation to work with different types of objects."
+  },
+  {
+    "question": "what is exception",
+    "answer": "An exception is an event that occurs during program execution and can interrupt the normal flow of a program."
+  },
+  {
+    "question": "what is compiler",
+    "answer": "A compiler translates source code into another form, often machine code or an intermediate representation, that can be executed."
+  },
+  {
+    "question": "what is interpreter",
+    "answer": "An interpreter executes program instructions through an interpreter rather than first producing a standalone machine-code executable."
+  },
+  {
+    "question": "what is source code",
+    "answer": "Source code is the human-readable code written by programmers."
+  },
+  {
+    "question": "what is machine learning model",
+    "answer": "A machine learning model is a mathematical or computational system trained to identify patterns and make predictions or decisions."
+  },
+  {
+    "question": "what is training data",
+    "answer": "Training data is the data used to train a machine learning model."
+  },
+  {
+    "question": "what is dataset",
+    "answer": "A dataset is a structured collection of related data used for analysis, testing, or machine learning."
+  },
+  {
+    "question": "what is supervised learning",
+    "answer": "Supervised learning trains a model using labeled examples."
+  },
+  {
+    "question": "what is unsupervised learning",
+    "answer": "Unsupervised learning finds patterns or structures in data without using labeled target answers."
+  },
+  {
+    "question": "what is reinforcement learning",
+    "answer": "Reinforcement learning trains an agent through interactions with an environment using rewards and penalties."
+  },
+  {
+    "question": "what is classification",
+    "answer": "Classification is a machine learning task that assigns data to predefined categories."
+  },
+  {
+    "question": "what is regression",
+    "answer": "Regression is a machine learning task used to predict continuous numerical values."
+  },
+  {
+    "question": "what is accuracy",
+    "answer": "Accuracy is a metric that measures the proportion of correct predictions among all predictions."
+  },
+  {
+    "question": "what is overfitting",
+    "answer": "Overfitting occurs when a machine learning model learns the training data too closely and performs poorly on new data."
+  },
+  {
+    "question": "what is underfitting",
+    "answer": "Underfitting occurs when a model is too simple to capture important patterns in the data."
+  },
+  {
+    "question": "what is data analysis",
+    "answer": "Data analysis is the process of examining data to find useful patterns, relationships, and insights."
+  },
+  {
+    "question": "what is encryption",
+    "answer": "Encryption converts readable data into an encoded form to help protect it from unauthorized access."
+  },
+  {
+    "question": "what is password",
+    "answer": "A password is a secret string of characters used to authenticate access to an account or system."
+  },
+  {
+    "question": "what is two factor authentication",
+    "answer": "Two-factor authentication adds an additional verification step beyond a password."
+  },
+  {
+    "question": "what is malware",
+    "answer": "Malware is software designed to perform harmful or unauthorized actions on a computer or network."
+  },
+  {
+    "question": "what is phishing",
+    "answer": "Phishing is a type of social engineering attack that attempts to trick people into revealing sensitive information."
+  },
+  {
+    "question": "what is website",
+    "answer": "A website is a collection of related web pages and resources available through the internet."
+  },
+  {
+    "question": "what is browser",
+    "answer": "A web browser is software used to access and interact with websites."
+  },
+  {
+    "question": "what is url",
+    "answer": "URL stands for Uniform Resource Locator and identifies the location of a resource on a network."
+  },
+  {
+    "question": "what is email",
+    "answer": "Email is a method of sending and receiving electronic messages over a network."
+  },
+  {
+    "question": "what is smartphone",
+    "answer": "A smartphone is a mobile device that provides communication, internet access, applications, and computing features."
+  },
+  {
+    "question": "what is technology",
+    "answer": "Technology is the application of knowledge, tools, and techniques to solve problems and accomplish tasks."
+  },
+  {
+    "question": "what is innovation",
+    "answer": "Innovation is the development or adoption of new ideas, methods, products, or improvements."
+  },
+  {
+    "question": "what is automation",
+    "answer": "Automation is the use of technology to perform tasks with reduced human intervention."
+  },
+  {
+    "question": "what is robotics",
+    "answer": "Robotics is a field involving the design, construction, programming, and use of robots."
+  },
+  {
+    "question": "what is cloud storage",
+    "answer": "Cloud storage is a service that stores data on remote servers accessible through a network."
+  },
+  {
+    "question": "what is virtual reality",
+    "answer": "Virtual reality is a technology that creates an immersive computer-generated environment."
+  },
+  {
+    "question": "what is augmented reality",
+    "answer": "Augmented reality overlays digital information or objects onto the user's view of the real world."
+  },
+  {
+    "question": "what is blockchain",
+    "answer": "Blockchain is a distributed digital ledger technology that records transactions in linked blocks."
+  },
+  {
+    "question": "what is cryptocurrency",
+    "answer": "Cryptocurrency is a type of digital asset that uses cryptographic techniques and typically operates on a blockchain or similar technology."
+  },
+  {
+    "question": "what is digital payment",
+    "answer": "Digital payment is the electronic transfer of money using digital devices or online payment systems."
+  },
+  {
+    "question": "goodbye",
+    "answer": "Goodbye!  ladle Have a great day!"
+  }
+]

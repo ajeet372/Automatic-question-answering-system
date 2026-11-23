@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AJ AI — Admin Panel</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
+  <link rel="stylesheet" href="assets/admin.css" />
+  <link rel="stylesheet" href="assets/premium.css" />
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════════════════════════════ -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">🛡️</div>
+    <h2>Admin Panel</h2>
+    <p>AJ AI Admin mein login karein</p>
+    <div class="form-group">
+      <input type="password" class="form-input" id="adminPass" placeholder="Password daalein..."
+        onkeydown="if(event.key==='Enter') Admin.login()" autofocus />
+    </div>
+    <button class="btn btn-primary w-full" onclick="Admin.login()" style="justify-content:center;">
+      🔐 Login
+    </button>
+    <div class="login-error" id="loginError"></div>
+    <div style="margin-top:20px;font-size:12px;color:var(--text3);">
+      Default: <code>admin123</code> &nbsp;|&nbsp; <a href="index.html" style="color:var(--primary);">← App par jaayein</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     ADMIN APP (shown after login)
+════════════════════════════════════════════════════════════ -->
+<div id="adminApp" class="admin-layout" style="display:none;">
+
+  <!-- ── Admin Sidebar ── -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-brand">
+      <div class="logo">🤖</div>
+      <div class="brand-text">
+        <div class="brand-name">AJ AI</div>
+        <div class="brand-sub">Admin Panel</div>
+      </div>
+      <button class="btn-icon admin-mobile-toggle" onclick="Admin.closeSidebar()" style="margin-left:auto;" title="Close">✕</button>
+    </div>
+
+    <nav class="admin-nav">
+      <div class="nav-section-label">Overview</div>
+      <button class="nav-item active" data-page="dashboard" onclick="Admin.navigateTo('dashboard')">
+        <span class="nav-icon">📊</span> Dashboard
+      </button>
+
+      <div class="nav-section-label">Users & Content</div>
+      <button class="nav-item" data-page="users" onclick="Admin.navigateTo('users')">
+        <span class="nav-icon">👥</span> User Management
+      </button>
+      <button class="nav-item" data-page="chats" onclick="Admin.navigateTo('chats')">
+        <span class="nav-icon">💬</span> Chat Management
+      </button>
+
+      <div class="nav-section-label">2026 Agent & Controls</div>
+      <button class="nav-item" data-page="agentcontrol" onclick="Admin.navigateTo('agentcontrol')">
+        <span class="nav-icon">🤖</span> Agent Control Center
+      </button>
+      <button class="nav-item" data-page="modelcenter" onclick="Admin.navigateTo('modelcenter')">
+        <span class="nav-icon">⚡</span> Model Center
+      </button>
+      <button class="nav-item" data-page="skillmanager" onclick="Admin.navigateTo('skillmanager')">
+        <span class="nav-icon">🧩</span> Skill Manager
+      </button>
+      <button class="nav-item" data-page="memorymanager" onclick="Admin.navigateTo('memorymanager')">
+        <span class="nav-icon">🧠</span> Memory Manager
+      </button>
+      <button class="nav-item" data-page="sandboxmgr" onclick="Admin.navigateTo('sandboxmgr')">
+        <span class="nav-icon">🛡️</span> Sandbox Manager
+      </button>
+      <button class="nav-item" data-page="promptversions" onclick="Admin.navigateTo('promptversions')">
+        <span class="nav-icon">📜</span> Prompt Versioning
+      </button>
+      <button class="nav-item" data-page="doctester" onclick="Admin.navigateTo('doctester')">
+        <span class="nav-icon">🔬</span> AI Document Tester
+      </button>
+      <button class="nav-item" data-page="localdb" onclick="Admin.navigateTo('localdb')">
+        <span class="nav-icon">🗄️</span> Local Database & Storage
+      </button>
+
+      <div class="nav-section-label">Configuration</div>
+      <button class="nav-item" data-page="features" onclick="Admin.navigateTo('features')">
+        <span class="nav-icon">🔧</span> Feature Management
+      </button>
+      <button class="nav-item" data-page="ai" onclick="Admin.navigateTo('ai')">
+        <span class="nav-icon">🤖</span> AI & Model Settings
+      </button>
+      <button class="nav-item" data-page="kb" onclick="Admin.navigateTo('kb')">
+        <span class="nav-icon">📚</span> Knowledge Base
+      </button>
+
+      <div class="nav-section-label">Insights</div>
+      <button class="nav-item" data-page="analytics" onclick="Admin.navigateTo('analytics')">
+        <span class="nav-icon">📈</span> Analytics & Reports
+      </button>
+      <button class="nav-item" data-page="logs" onclick="Admin.navigateTo('logs')">
+        <span class="nav-icon">📋</span> Logs & System Health
+      </button>
+
+      <div class="nav-section-label">System</div>
+      <button class="nav-item" data-page="appearance" onclick="Admin.navigateTo('appearance')">
+        <span class="nav-icon">🎨</span> Appearance & Branding
+      </button>
+      <button class="nav-item" data-page="security" onclick="Admin.navigateTo('security')">
+        <span class="nav-icon">🔒</span> Security & Permissions
+      </button>
+      <button class="nav-item" data-page="settings" onclick="Admin.navigateTo('settings')">
+        <span class="nav-icon">⚙️</span> General Settings
+      </button>
+    </nav>
+
+    <div class="admin-sidebar-footer">
+      <a href="index.html" class="btn btn-ghost btn-sm" style="flex:1;justify-content:center;">← App</a>
+      <button class="btn btn-ghost btn-sm" onclick="Admin.logout()">🚪 Logout</button>
+    </div>
+  </aside>
+
+  <!-- Mobile Overlay Backdrop -->
+  <div class="admin-sidebar-overlay" id="adminSidebarOverlay" onclick="Admin.closeSidebar()"></div>
+
+  <!-- ── Admin Main ── -->
+  <div class="admin-main">
+
+    <!-- Topbar -->
+    <div class="admin-topbar">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <button class="btn-icon admin-mobile-toggle" onclick="Admin.toggleSidebar()" title="Toggle Menu" aria-label="Toggle Menu">☰</button>
+        <h1 id="topbarTitle">📊 Dashboard</h1>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn-icon" id="adminThemeBtn" onclick="Admin.toggleTheme()" title="Toggle Theme">☀️</button>
+        <button class="btn btn-ghost btn-sm" onclick="Admin.changePassword()">🔑 Change Password</button>
+        <button class="btn btn-primary btn-sm" onclick="Admin.exportAllData()">📦 Backup</button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="admin-content">
+
+      <!-- ════════════════ DASHBOARD ════════════════ -->
+      <div class="admin-page active" id="page-dashboard">
+        <div class="page-header">
+          <div>
+            <h2>📊 Dashboard</h2>
+            <p>AJ AI ka overview aur key metrics</p>
+          </div>
+          <button class="btn btn-secondary" onclick="Admin.renderDashboard()">🔄 Refresh</button>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card primary">
+            <div class="stat-icon">💬</div>
+            <div class="stat-value" id="statTotalMessages">0</div>
+            <div class="stat-label">Total Messages</div>
+          </div>
+          <div class="stat-card success">
+            <div class="stat-icon">🗂️</div>
+            <div class="stat-value" id="statTotalConvs">0</div>
+            <div class="stat-label">Conversations</div>
+          </div>
+          <div class="stat-card accent">
+            <div class="stat-icon">👥</div>
+            <div class="stat-value" id="statTotalUsers">0</div>
+            <div class="stat-label">Users</div>
+          </div>
+          <div class="stat-card secondary">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value" id="statEnabledFeatures">0</div>
+            <div class="stat-label">Active Features</div>
+          </div>
+          <div class="stat-card warning">
+            <div class="stat-icon">💾</div>
+            <div class="stat-value" id="storageUsed">—</div>
+            <div class="stat-label">Storage Used</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>🕐 Recent Conversations</h3></div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead><tr><th>Title</th><th>Messages</th><th>Status</th><th>Last Active</th></tr></thead>
+                <tbody id="recentConvsTable"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>🔧 Feature Usage</h3></div>
+            <div class="card-body">
+              <div class="bar-chart" id="featureUsageBars"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ USER MANAGEMENT ════════════════ -->
+      <div class="admin-page" id="page-users">
+        <div class="page-header">
+          <div>
+            <h2>👥 User Management</h2>
+            <p>Users ko manage, roles assign karein, access control karein</p>
+          </div>
+          <button class="btn btn-primary" onclick="Admin.showAddUserModal()">➕ Naya User</button>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3>Users ki List</h3>
+            <div class="search-bar" style="width:250px;">
+              <span>🔍</span>
+              <input type="text" placeholder="Search users..."
+                oninput="Admin.renderUsers(this.value.toLowerCase())" />
+            </div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>User</th><th>Role</th><th>Status</th><th>Messages</th>
+                  <th>Joined</th><th>Last Active</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ CHAT MANAGEMENT ════════════════ -->
+      <div class="admin-page" id="page-chats">
+        <div class="page-header">
+          <div>
+            <h2>💬 Chat Management</h2>
+            <p>Conversations ko dekhein, manage karein aur delete karein</p>
+          </div>
+          <button class="btn btn-danger" onclick="Admin.clearAllChats()">🗑️ Clear All Chats</button>
+        </div>
+
+        <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
+          <div class="stat-card primary">
+            <div class="stat-icon">💬</div>
+            <div class="stat-value" id="totalChatsCount">0</div>
+            <div class="stat-label">Total Chats</div>
+          </div>
+          <div class="stat-card warning">
+            <div class="stat-icon">📦</div>
+            <div class="stat-value" id="archivedChatsCount">0</div>
+            <div class="stat-label">Archived</div>
+          </div>
+          <div class="stat-card accent">
+            <div class="stat-icon">📌</div>
+            <div class="stat-value" id="pinnedChatsCount">0</div>
+            <div class="stat-label">Pinned</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>All Conversations</h3></div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Title</th><th>Messages</th><th>Status</th><th>Last Updated</th><th>Action</th></tr></thead>
+              <tbody id="chatsTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ FEATURE MANAGEMENT ════════════════ -->
+      <div class="admin-page" id="page-features">
+        <div class="page-header">
+          <div>
+            <h2>🔧 Feature Management</h2>
+            <p>App features ko globally enable ya disable karein</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Features</h3>
+            <span class="text-xs text-muted">Toggle karke features on/off karein</span>
+          </div>
+          <div class="card-body">
+            <div id="featuresContainer"></div>
+          </div>
+        </div>
+
+        <div class="card mt-3" style="border-left:3px solid var(--warning);">
+          <div class="card-body">
+            <div class="flex gap-2 items-center">
+              <span style="font-size:24px;">⚠️</span>
+              <div>
+                <div style="font-weight:600;">Security Note</div>
+                <div class="text-sm text-muted">UI mein button hide karna security ke liye kaafi nahi hai. Backend ya local app logic mein bhi feature access enforce karna zaroori hai.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ AI SETTINGS ════════════════ -->
+      <div class="admin-page" id="page-ai">
+        <div class="page-header">
+          <div>
+            <h2>🤖 AI & Model Settings</h2>
+            <p>Chatbot ki AI settings aur behavior configure karein</p>
+          </div>
+          <button class="btn btn-primary" onclick="Admin.saveAISettings()">💾 Save Settings</button>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Model Configuration</h3></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Default AI Model</label>
+                <select class="form-select" id="aiModel">
+                  <option value="rule-based">🔄 Rule-based (Offline FAQ)</option>
+                  <option value="ollama">🦙 Ollama (Local Backend)</option>
+                  <option value="webllm">🌐 WebLLM (Browser)</option>
+                  <option value="transformers">🤗 Transformers.js</option>
+                </select>
+                <div class="form-hint">Local model ke liye Ollama install karein</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Max Response Tokens</label>
+                <input type="number" class="form-input" id="aiMaxTokens" min="64" max="4096" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Temperature (0-1)</label>
+                <input type="range" style="width:100%;accent-color:var(--primary);" id="aiTemperature" min="0" max="1" step="0.1" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Context Size (Messages)</label>
+                <input type="number" class="form-input" id="aiContextSize" min="1" max="50" />
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h3>System Prompt & Personality</h3></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">System Prompt</label>
+                <textarea class="form-textarea" id="aiSystemPrompt" rows="8"
+                  placeholder="Chatbot ki personality aur instructions..."></textarea>
+                <div class="form-hint">Yeh prompt chatbot ki personality define karta hai</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>📊 System Resources</h3></div>
+          <div class="card-body">
+            <div class="health-item">
+              <div class="health-icon">🌐</div>
+              <div class="health-info">
+                <div class="health-name">Network Status</div>
+                <div class="health-value" id="aiNetworkStatus">Checking...</div>
+              </div>
+              <div class="health-status" id="aiNetworkIcon">🔄</div>
+            </div>
+            <div class="health-item">
+              <div class="health-icon">💾</div>
+              <div class="health-info">
+                <div class="health-name">Local Storage</div>
+                <div class="health-value">Browser localStorage available</div>
+              </div>
+              <div class="health-status">✅</div>
+            </div>
+            <div class="health-item">
+              <div class="health-icon">🤖</div>
+              <div class="health-info">
+                <div class="health-name">AI Engine</div>
+                <div class="health-value">Rule-based engine active</div>
+              </div>
+              <div class="health-status">✅</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ KNOWLEDGE BASE ════════════════ -->
+      <div class="admin-page" id="page-kb">
+        <div class="page-header">
+          <div>
+            <h2>📚 Knowledge Base</h2>
+            <p>FAQ entries manage karein aur chatbot ke answers customize karein</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="btn btn-secondary" onclick="Admin.exportKB()">📥 Export KB</button>
+            <button class="btn btn-primary" onclick="Admin.showAddKBModal()">➕ Add Entry</button>
+          </div>
+        </div>
+
+        <div class="stats-row" style="grid-template-columns:1fr 1fr;">
+          <div class="stat-card primary">
+            <div class="stat-icon">📚</div>
+            <div class="stat-value" id="kbTotalEntries">0</div>
+            <div class="stat-label">Total Entries</div>
+          </div>
+          <div class="stat-card success">
+            <div class="stat-icon">✨</div>
+            <div class="stat-value" id="kbCustomEntries">0</div>
+            <div class="stat-label">Custom Entries</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>KB Entries</h3>
+            <div class="search-bar" style="width:250px;">
+              <span>🔍</span>
+              <input type="text" placeholder="Search KB..."
+                oninput="Admin.renderKB(this.value.toLowerCase())" />
+            </div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Type</th><th>Category</th><th>Question</th><th>Answer (Preview)</th><th>Actions</th></tr></thead>
+              <tbody id="kbTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ ANALYTICS ════════════════ -->
+      <div class="admin-page" id="page-analytics">
+        <div class="page-header">
+          <div>
+            <h2>📈 Analytics & Reports</h2>
+            <p>Usage trends aur app metrics dekhein</p>
+          </div>
+          <button class="btn btn-secondary" onclick="Admin.exportCSV()">📊 Export CSV</button>
+        </div>
+
+        <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
+          <div class="stat-card primary">
+            <div class="stat-icon">💬</div>
+            <div class="stat-value" id="analyticsTotalMsgs">0</div>
+            <div class="stat-label">Total Messages</div>
+          </div>
+          <div class="stat-card success">
+            <div class="stat-icon">🗂️</div>
+            <div class="stat-value" id="analyticsTotalConvs">0</div>
+            <div class="stat-label">Conversations</div>
+          </div>
+          <div class="stat-card error" style="border-top-color:var(--error);">
+            <div class="stat-icon">❌</div>
+            <div class="stat-value" id="analyticsErrors">0</div>
+            <div class="stat-label">Errors</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>📅 Daily Messages (Last 7 days)</h3></div>
+            <div class="card-body">
+              <div class="bar-chart" id="dailyChart"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>🔧 Feature Usage</h3></div>
+            <div class="card-body">
+              <div class="bar-chart" id="featUsageChart"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ APPEARANCE ════════════════ -->
+      <div class="admin-page" id="page-appearance">
+        <div class="page-header">
+          <div>
+            <h2>🎨 Appearance & Branding</h2>
+            <p>App ka look aur feel customize karein</p>
+          </div>
+          <button class="btn btn-primary" onclick="Admin.saveAppearance()">💾 Save</button>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Branding</h3></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">App Name</label>
+                <input type="text" class="form-input" id="appBrandName" placeholder="AJ AI" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Logo URL (optional)</label>
+                <input type="text" class="form-input" id="appLogo" placeholder="https://example.com/logo.png" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Welcome Message</label>
+                <textarea class="form-textarea" id="appWelcomeMsg" rows="3"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h3>Theme & Colors</h3></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Default Theme</label>
+                <select class="form-select" id="appTheme">
+                  <option value="dark">🌙 Dark</option>
+                  <option value="light">☀️ Light</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Primary Color</label>
+                <div class="flex gap-2 items-center">
+                  <input type="color" id="appPrimaryColor" value="#6366f1"
+                    style="width:48px;height:40px;border:none;background:none;cursor:pointer;border-radius:6px;" />
+                  <span class="text-sm text-muted">Choose primary accent color</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Preview</label>
+                <div style="padding:12px;border-radius:8px;background:var(--bg);border:1px solid var(--border);">
+                  <div style="display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:white;padding:8px 16px;border-radius:6px;">
+                    🤖 AJ AI Button
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ SECURITY ════════════════ -->
+      <div class="admin-page" id="page-security">
+        <div class="page-header">
+          <div>
+            <h2>🔒 Security & Permissions</h2>
+            <p>Audit logs aur security settings</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="btn btn-secondary" onclick="Admin.exportAuditLog()">📥 Export Log</button>
+            <button class="btn btn-danger" onclick="Admin.clearAuditLog()">🗑️ Clear Log</button>
+          </div>
+        </div>
+
+        <div class="grid-2 mb-4">
+          <div class="card">
+            <div class="card-header"><h3>🔑 Admin Password</h3></div>
+            <div class="card-body">
+              <p class="text-sm text-muted" style="margin-bottom:12px;">Admin password change karein. Minimum 6 characters.</p>
+              <button class="btn btn-primary" onclick="Admin.changePassword()">🔑 Change Password</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>⚠️ Security Notes</h3></div>
+            <div class="card-body">
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+                <li class="text-sm">✅ Admin session sirf tab close hone tak rehta hai</li>
+                <li class="text-sm">✅ Password localStorage mein encoded store hota hai</li>
+                <li class="text-sm text-muted">⚠️ Production mein server-side auth use karein</li>
+                <li class="text-sm text-muted">⚠️ Yeh app purely offline / frontend hai</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>📋 Audit Log</h3></div>
+          <div id="auditLogContainer" style="max-height:400px;overflow-y:auto;padding:0 20px;"></div>
+        </div>
+      </div>
+
+      <!-- ════════════════ GENERAL SETTINGS ════════════════ -->
+      <div class="admin-page" id="page-settings">
+        <div class="page-header">
+          <div>
+            <h2>⚙️ General Settings</h2>
+            <p>App configuration aur data management</p>
+          </div>
+          <button class="btn btn-primary" onclick="Admin.saveGeneralSettings()">💾 Save Settings</button>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>App Configuration</h3></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Default Language</label>
+                <select class="form-select" id="gsetLanguage">
+                  <option value="hi">हिंदी</option>
+                  <option value="en">English</option>
+                  <option value="ur">اردو</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date Format</label>
+                <select class="form-select" id="gsetDateFormat">
+                  <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                  <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                  <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Max File Upload (MB)</label>
+                <input type="number" class="form-input" id="gsetMaxUpload" min="1" max="100" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Chat History Retention (Days)</label>
+                <input type="number" class="form-input" id="gsetRetention" min="1" max="365" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Typing Animation Speed (ms per char)</label>
+                <input type="number" class="form-input" id="gsetTypingSpeed" min="5" max="100" />
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h3>Data Management</h3></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px;">
+              <button class="btn btn-primary w-full" onclick="Admin.exportAllData()" style="justify-content:center;">
+                📦 Full Backup Export
+              </button>
+              <label class="btn btn-ghost w-full" style="cursor:pointer;justify-content:center;">
+                📥 Import Backup
+                <input type="file" hidden accept=".json" onchange="importAdminData(event)" />
+              </label>
+              <div class="divider"></div>
+              <button class="btn btn-danger w-full" onclick="Admin.resetAllData()" style="justify-content:center;">
+                ⚠️ Reset All Data
+              </button>
+              <p class="text-xs text-muted">Reset se saara data permanently delete ho jaayega.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ LOGS & SYSTEM HEALTH ════════════════ -->
+      <div class="admin-page" id="page-logs">
+        <div class="page-header">
+          <div>
+            <h2>📋 Logs & System Health</h2>
+            <p>Errors, diagnostics aur system status dekhein</p>
+          </div>
+          <button class="btn btn-danger" onclick="Admin.clearErrorLogs()">🗑️ Clear Errors</button>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-header"><h3>⚡ System Health</h3></div>
+          <div class="card-body">
+            <div class="health-item">
+              <div class="health-icon">💾</div>
+              <div class="health-info">
+                <div class="health-name">Storage Used</div>
+                <div class="health-value" id="healthStorage">—</div>
+              </div>
+              <div class="health-status">✅</div>
+            </div>
+            <div class="health-item">
+              <div class="health-icon">💬</div>
+              <div class="health-info">
+                <div class="health-name">Total Conversations</div>
+                <div class="health-value" id="healthConvs">—</div>
+              </div>
+              <div class="health-status">ℹ️</div>
+            </div>
+            <div class="health-item">
+              <div class="health-icon">👥</div>
+              <div class="health-info">
+                <div class="health-name">Total Users</div>
+                <div class="health-value" id="healthUsers">—</div>
+              </div>
+              <div class="health-status">ℹ️</div>
+            </div>
+            <div class="health-item">
+              <div class="health-icon">❌</div>
+              <div class="health-info">
+                <div class="health-name">Error Count</div>
+                <div class="health-value" id="healthErrors">—</div>
+              </div>
+              <div class="health-status" id="healthErrorIcon">✅</div>
+            </div>
+            <div class="health-item">
+              <div class="health-icon">🌐</div>
+              <div class="health-info">
+                <div class="health-name">Browser</div>
+                <div class="health-value" id="healthBrowser">—</div>
+              </div>
+              <div class="health-status">✅</div>
+            </div>
+            <div class="health-item">
+              <div class="health-icon">📡</div>
+              <div class="health-info">
+                <div class="health-name">Network</div>
+                <div class="health-value" id="healthOnline">—</div>
+              </div>
+              <div class="health-status">ℹ️</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>❌ Error Logs</h3></div>
+          <div id="errorLogsContainer" style="max-height:400px;overflow-y:auto;padding:0 20px;"></div>
+        </div>
+      </div>
+
+      <!-- ════════════════ AGENT CONTROL CENTER ════════════════ -->
+      <div class="admin-page" id="page-agentcontrol">
+        <div class="page-header">
+          <div>
+            <h2>🤖 Agent Control Center</h2>
+            <p>Monitor real-time task queue, executions, and human safety gates</p>
+          </div>
+          <button class="btn btn-secondary" onclick="Admin.renderAgentControl()">🔄 Refresh</button>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header"><h3>Running & Historical Agent Tasks</h3></div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Task ID</th><th>Goal</th><th>Steps Completed</th><th>Status</th><th>Created</th><th>Control</th></tr></thead>
+              <tbody id="adminAgentTasksTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ MODEL CENTER ════════════════ -->
+      <div class="admin-page" id="page-modelcenter">
+        <div class="page-header">
+          <div>
+            <h2>⚡ Model Center</h2>
+            <p>Local AI Model catalog, load status, and inference benchmarking</p>
+          </div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card primary">
+            <div class="stat-icon">🦙</div>
+            <div class="stat-value">Local</div>
+            <div class="stat-label">Model Engine</div>
+          </div>
+          <div class="stat-card success">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-value">42 tok/s</div>
+            <div class="stat-label">Est. Inference Rate</div>
+          </div>
+          <div class="stat-card accent">
+            <div class="stat-icon">🔒</div>
+            <div class="stat-value">0 B</div>
+            <div class="stat-label">Data Egress</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Compatible Local Model Registry</h3></div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Model</th><th>Parameters</th><th>Context Window</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><b>Gemma 4 (Local-first Agent)</b></td>
+                  <td>2B / 9B</td>
+                  <td>32K</td>
+                  <td><span class="badge badge-success">Ready (GGUF / WebLLM)</span></td>
+                  <td><button class="btn btn-xs btn-primary" onclick="adminToast('Gemma 4 model selected!', 'success')">Set Default</button></td>
+                </tr>
+                <tr>
+                  <td><b>Llama 3.2 3B</b></td>
+                  <td>3.2B</td>
+                  <td>128K</td>
+                  <td><span class="badge badge-primary">Compatible</span></td>
+                  <td><button class="btn btn-xs btn-secondary" onclick="adminToast('Llama selected', 'info')">Select</button></td>
+                </tr>
+                <tr>
+                  <td><b>Rule-Based Deterministic FAQ</b></td>
+                  <td>Zero Weights</td>
+                  <td>Unlimited</td>
+                  <td><span class="badge badge-success">Active & Offline</span></td>
+                  <td><button class="btn btn-xs btn-ghost">Active</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ SKILL MANAGER ════════════════ -->
+      <div class="admin-page" id="page-skillmanager">
+        <div class="page-header">
+          <div>
+            <h2>🧩 Skill Manager</h2>
+            <p>Install, enable, and configure granular agent tool execution permissions</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Active Agent Capabilities</h3></div>
+          <div class="card-body" id="adminSkillsContainer"></div>
+        </div>
+      </div>
+
+      <!-- ════════════════ MEMORY MANAGER ════════════════ -->
+      <div class="admin-page" id="page-memorymanager">
+        <div class="page-header">
+          <div>
+            <h2>🧠 Memory Manager</h2>
+            <p>Audit and curate long-term user memories, preferences, and persona context</p>
+          </div>
+          <button class="btn btn-danger" onclick="MemoryTimeline.clearAll(); Admin.renderMemoryManager();">Clear All Memories</button>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Stored Memories</h3></div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Key</th><th>Stored Value</th><th>Category</th><th>Confidence</th><th>Actions</th></tr></thead>
+              <tbody id="adminMemoriesTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ SANDBOX MANAGER ════════════════ -->
+      <div class="admin-page" id="page-sandboxmgr">
+        <div class="page-header">
+          <div>
+            <h2>🛡️ Sandbox & Execution Gate</h2>
+            <p>Code execution safety barriers, timeouts, and permission gates</p>
+          </div>
+          <button class="btn btn-primary" onclick="adminToast('Sandbox security policies enforced!', 'success')">Enforce Policies</button>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Safety Isolation Rules</h3></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Max Code Execution Timeout</label>
+                <input type="number" class="form-input" value="3000" id="sandboxTimeout" />
+                <div class="form-hint">Terminates execution if runtime exceeds threshold (ms).</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Network Egress in Sandbox</label>
+                <select class="form-select">
+                  <option value="blocked" selected>BLOCKED (Complete Airgap)</option>
+                  <option value="allowlist">Allowed Hosts Only</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">File System Modification</label>
+                <select class="form-select">
+                  <option value="approval_required" selected>Approval Gate Required</option>
+                  <option value="readonly">Read-Only Enforced</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Safety Gate Status</h3></div>
+            <div class="card-body">
+              <div class="health-item">
+                <div class="health-icon">🛡️</div>
+                <div class="health-info">
+                  <div class="health-name">Eval Isolation</div>
+                  <div class="health-value">Strict context wrapping active</div>
+                </div>
+                <div class="health-status">✅</div>
+              </div>
+              <div class="health-item">
+                <div class="health-icon">🛑</div>
+                <div class="health-info">
+                  <div class="health-name">Human-in-the-Loop Gate</div>
+                  <div class="health-value">Mandatory approval on sensitive actions</div>
+                </div>
+                <div class="health-status">✅</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ PROMPT VERSIONING ════════════════ -->
+      <div class="admin-page" id="page-promptversions">
+        <div class="page-header">
+          <div>
+            <h2>📜 Prompt Versioning & Rollback</h2>
+            <p>Audit system prompts, diff versions, and instantly revert changes</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Version History</h3></div>
+          <div class="card-body" id="adminPromptVersionsContainer"></div>
+        </div>
+      </div>
+
+      <!-- ════════════════ AI DOCUMENT TESTER ════════════════ -->
+      <div class="admin-page" id="page-doctester">
+        <div class="page-header">
+          <div>
+            <h2>🔬 Advanced AI Document Tester (RAG Evaluation)</h2>
+            <p>Simulate queries, review match scores, source citations, overrides & batch benchmarks</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="btn btn-primary" onclick="Admin.runRAGBatchTest()">🚀 Run Batch Evaluation</button>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card primary">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-value" id="ragAvgScore">90%</div>
+            <div class="stat-label">Average Match Score</div>
+          </div>
+          <div class="stat-card success">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value" id="ragPassedCount">2 / 3</div>
+            <div class="stat-label">Evaluations Passing</div>
+          </div>
+          <div class="stat-card accent">
+            <div class="stat-icon">✏️</div>
+            <div class="stat-value" id="ragOverrideCount">1</div>
+            <div class="stat-label">Manual Overrides</div>
+          </div>
+        </div>
+
+        <!-- Interactive Query Tester -->
+        <div class="card mb-3">
+          <div class="card-header"><h3>Single Query Diagnostic & Source Matcher</h3></div>
+          <div class="card-body">
+            <div class="form-row">
+              <input type="text" class="form-input" id="ragTestInput" placeholder="Enter diagnostic question to test against knowledge base..." />
+              <button class="btn btn-secondary" style="flex:0 0 140px;" onclick="Admin.testSingleRAGQuery()">Test Query</button>
+            </div>
+            <div id="ragSingleResult" class="mt-3" style="display:none;"></div>
+          </div>
+        </div>
+
+        <!-- Benchmark Table -->
+        <div class="card">
+          <div class="card-header"><h3>Active RAG Test Cases & Snippet Citations</h3></div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Query</th><th>Source Document</th><th>Match Score</th><th>Top Matched Snippet</th><th>Override</th><th>Actions</th></tr></thead>
+              <tbody id="ragTestCasesTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ LOCAL DATABASE & STORAGE ════════════════ -->
+      <div class="admin-page" id="page-localdb">
+        <div class="page-header">
+          <div>
+            <h2>🗄️ Local Database & Storage Engine</h2>
+            <p>Schema version, collections, storage footprint, and on-device table viewer</p>
+          </div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card primary">
+            <div class="stat-icon">🗄️</div>
+            <div class="stat-value">v2026.2</div>
+            <div class="stat-label">Embedded DB Schema</div>
+          </div>
+          <div class="stat-card success">
+            <div class="stat-icon">🔒</div>
+            <div class="stat-value">Local Only</div>
+            <div class="stat-label">Storage Sandbox</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Active Collections & Indices</h3></div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Collection</th><th>Records</th><th>Allocated Footprint</th><th>Engine Status</th></tr></thead>
+              <tbody id="localDbTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end admin-content -->
+  </div><!-- end admin-main -->
+</div><!-- end adminApp -->
+
+<!-- ── Modals ── -->
+
+<!-- Add User Modal -->
+<div class="modal" id="addUserModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>➕ Naya User Add Karein</h3>
+      <button class="btn-icon" onclick="document.getElementById('addUserModal').classList.remove('active')">✕</button>
+    </div>
+    <div class="form-group"><label class="form-label">Naam *</label><input type="text" class="form-input" id="newUserName" placeholder="User ka naam..." /></div>
+    <div class="form-group"><label class="form-label">Email *</label><input type="email" class="form-input" id="newUserEmail" placeholder="email@example.com" /></div>
+    <div class="form-group">
+      <label class="form-label">Role</label>
+      <select class="form-select" id="newUserRole">
+        <option value="user">User</option>
+        <option value="moderator">Moderator</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+    <div class="flex gap-2 justify-between mt-3">
+      <button class="btn btn-ghost" onclick="document.getElementById('addUserModal').classList.remove('active')">Cancel</button>
+      <button class="btn btn-primary" onclick="Admin.saveNewUser()">✅ Add User</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add KB Entry Modal -->
+<div class="modal" id="addKBModal">
+  <div class="modal-content" style="max-width:540px;">
+    <div class="modal-header">
+      <h3>➕ KB Entry Add Karein</h3>
+      <button class="btn-icon" onclick="document.getElementById('addKBModal').classList.remove('active')">✕</button>
+    </div>
+    <div class="form-group"><label class="form-label">Category</label><input type="text" class="form-input" id="kbCategory" placeholder="General, Chat, Tools..." /></div>
+    <div class="form-group"><label class="form-label">Question *</label><input type="text" class="form-input" id="kbQuestion" placeholder="User ka sawaal..." /></div>
+    <div class="form-group"><label class="form-label">Keywords (comma separated)</label><input type="text" class="form-input" id="kbKeywords" placeholder="help, support, madad" /></div>
+    <div class="form-group"><label class="form-label">Answer *</label><textarea class="form-textarea" id="kbAnswer" rows="4" placeholder="Chatbot ka jawab..."></textarea></div>
+    <div class="flex gap-2 justify-between mt-3">
+      <button class="btn btn-ghost" onclick="document.getElementById('addKBModal').classList.remove('active')">Cancel</button>
+      <button class="btn btn-primary" onclick="Admin.saveKBEntry()">✅ Save Entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="adminToastContainer" class="toast-container"></div>
+
+<!-- Scripts -->
+<script src="data/knowledge.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/advanced_features.js"></script>
+<script src="js/agent.js"></script>
+<script src="js/workflow_arena.js"></script>
+<script src="js/document_tester.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  // Initialize
+  document.addEventListener("DOMContentLoaded", () => {
+    if (Admin.checkAuth()) {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("adminApp").style.display = "flex";
+      Admin.init();
+    }
+
+    // Network check for AI page
+    const netStatus = document.getElementById("aiNetworkStatus");
+    const netIcon = document.getElementById("aiNetworkIcon");
+    if (netStatus) {
+      netStatus.textContent = navigator.onLine ? "Online" : "Offline (Perfect for local AI)";
+      if (netIcon) netIcon.textContent = navigator.onLine ? "🌐" : "✅";
+    }
+  });
+
+  function importAdminData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (data.settings) Storage.updateSettings(data.settings);
+        if (data.conversations) Storage.saveConversations(data.conversations);
+        if (data.users) Storage.saveUsers(data.users);
+        if (data.features) Storage.saveFeatures(data.features);
+        if (data.kb) Storage.saveKBEntries(data.kb);
+        adminToast("Data imported! ✅", "success");
+        Admin.renderPage(Admin.currentPage);
+      } catch {
+        adminToast("Import failed: Invalid file", "error");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // Close modals on backdrop click
+  document.querySelectorAll(".modal").forEach(modal => {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) modal.classList.remove("active");
+    });
+  });
+</script>
+
+</body>
+</html>

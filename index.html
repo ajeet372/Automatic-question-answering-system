@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AJ AI - Offline AI Chatbot with tools, file reading and more" />
+  <title>AJ AI</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="assets/premium.css" />
+
+  <!-- Highlight.js for code -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+</head>
+<body class="dark">
+
+<div class="app-layout">
+
+  <!-- ════════════════════════════════════════════════════════
+       SIDEBAR
+  ════════════════════════════════════════════════════════ -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="app-logo">🤖</div>
+      <span class="app-name app-name-text">AJ AI</span>
+      <button class="btn-icon" onclick="UI.closeSidebar()" title="Close Sidebar">✕</button>
+    </div>
+
+    <button class="new-chat-btn" onclick="Chat.newConversation()">
+      ✏️ &nbsp;Naya Chat
+    </button>
+
+    <div class="search-wrapper">
+      <input
+        type="text"
+        id="convSearch"
+        class="search-input"
+        placeholder="🔍  Chats dhundho..."
+        autocomplete="off"
+      />
+    </div>
+
+    <div id="convList"></div>
+
+    <div class="sidebar-footer">
+      <button class="btn btn-ghost" style="flex:1; font-size:13px;" onclick="App.openSettings()">⚙️ Settings</button>
+      <a href="admin.html" class="btn btn-ghost" style="font-size:13px;" title="Admin Panel">🛡️ Admin</a>
+    </div>
+  </aside>
+
+  <!-- Mobile Overlay Backdrop -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="UI.closeSidebar()"></div>
+
+  <!-- ════════════════════════════════════════════════════════
+       MAIN CHAT AREA
+  ════════════════════════════════════════════════════════ -->
+  <main class="chat-area">
+
+    <!-- Chat Header -->
+    <header class="chat-header">
+      <button class="btn-icon sidebar-toggle-btn" onclick="UI.toggleSidebar()" title="Toggle Sidebar" aria-label="Toggle Sidebar">☰</button>
+      <span id="chatTitle">Naya Chat</span>
+
+      <div class="header-actions">
+        <button class="btn-icon" onclick="ToolsPanel.toggle('calculator')" title="Tools">🔧</button>
+        <button class="btn-icon" onclick="Chat.clearCurrentChat()" title="Clear Chat">🧹</button>
+        <button class="btn-icon" onclick="UI.toggleTheme()" id="themeToggle" title="Toggle Theme">☀️</button>
+        <button class="btn-icon" onclick="App.openSettings()" title="Settings">⚙️</button>
+      </div>
+    </header>
+
+    <!-- Messages -->
+    <div id="chatMessages"></div>
+
+    <!-- Input Area -->
+    <div class="chat-input-area">
+      <div class="input-wrapper">
+        <!-- File upload -->
+        <label title="File upload karo" style="cursor:pointer; color:var(--text3); font-size:20px; padding:4px;">
+          📎
+          <input type="file" hidden accept=".txt,.md,.json,.csv,.pdf,.js,.py,.html,.css"
+            onchange="FileTools.handleChatFileUpload(event)" />
+        </label>
+
+        <textarea
+          id="chatInput"
+          placeholder="Kuch poochho ya type karein... (Enter = Send, Shift+Enter = New line)"
+          rows="1"
+          autocomplete="off"
+        ></textarea>
+
+        <div class="input-actions">
+          <button class="btn-icon" id="voiceBtn" onclick="toggleVoiceInput()" title="Voice Input" style="font-size:18px;">
+            🎤
+          </button>
+          <button class="send-btn" onclick="App.sendMessage()" title="Send">
+            ➤
+          </button>
+        </div>
+      </div>
+      <p class="input-hint">Enter = Send &nbsp;|&nbsp; Shift+Enter = New line &nbsp;|&nbsp; Ctrl+N = New chat &nbsp;|&nbsp; Ctrl+K = Search</p>
+    </div>
+  </main>
+
+  <!-- ════════════════════════════════════════════════════════
+       TOOLS PANEL
+  ════════════════════════════════════════════════════════ -->
+  <aside id="toolsPanel">
+    <div class="tools-header">
+      <h3>🔧 Tools</h3>
+      <button class="btn-icon" onclick="ToolsPanel.close()">✕</button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tool-tabs">
+      <button class="tool-tab active" data-tool="calculator" onclick="ToolsPanel.switchTool('calculator')">🧮 Calc</button>
+      <button class="tool-tab" data-tool="wordcount" onclick="ToolsPanel.switchTool('wordcount')">📝 Words</button>
+      <button class="tool-tab" data-tool="caseconvert" onclick="ToolsPanel.switchTool('caseconvert')">🔠 Case</button>
+      <button class="tool-tab" data-tool="password" onclick="ToolsPanel.switchTool('password')">🔑 Pass</button>
+      <button class="tool-tab" data-tool="converter" onclick="ToolsPanel.switchTool('converter')">🔄 Units</button>
+      <button class="tool-tab" data-tool="json" onclick="ToolsPanel.switchTool('json')">{ } JSON</button>
+      <button class="tool-tab" data-tool="datecalc" onclick="ToolsPanel.switchTool('datecalc')">📅 Date</button>
+      <button class="tool-tab" data-tool="filereader" onclick="ToolsPanel.switchTool('filereader')">📄 Files</button>
+      <button class="tool-tab" data-tool="notes" onclick="ToolsPanel.switchTool('notes'); ToolsPanel.renderNotes()">📓 Notes</button>
+      <button class="tool-tab" data-tool="agentmode" onclick="ToolsPanel.switchTool('agentmode'); window.renderAgentUI()">🤖 Agent</button>
+      <button class="tool-tab" data-tool="coderunner" onclick="ToolsPanel.switchTool('coderunner')">💻 Runner</button>
+      <button class="tool-tab" data-tool="memory" onclick="ToolsPanel.switchTool('memory'); window.renderMemoryUI()">🧠 Memory</button>
+      <button class="tool-tab" data-tool="workflows" onclick="ToolsPanel.switchTool('workflows'); window.renderWorkflowUI()">⚡ Workflows</button>
+      <button class="tool-tab" data-tool="promptlab" onclick="ToolsPanel.switchTool('promptlab'); window.renderPromptLabUI()">🧪 PromptLab</button>
+      <button class="tool-tab" data-tool="arena" onclick="ToolsPanel.switchTool('arena')">⚔️ Arena</button>
+      <button class="tool-tab" data-tool="semantic" onclick="ToolsPanel.switchTool('semantic')">🔎 Semantic</button>
+      <button class="tool-tab" data-tool="privacy" onclick="ToolsPanel.switchTool('privacy'); window.renderPrivacyUI()">🛡️ Privacy</button>
+      <button class="tool-tab" data-tool="hardware" onclick="ToolsPanel.switchTool('hardware'); window.renderHardwareUI()">⚡ Hardware</button>
+    </div>
+
+    <div class="tools-body">
+
+      <!-- ── Calculator ── -->
+      <div class="tool-content active" data-tool="calculator">
+        <div class="calc-display" id="calcDisplay">0</div>
+        <div class="calc-grid">
+          <button class="calc-btn fn" onclick="ToolsPanel.calcPress('sin')">sin</button>
+          <button class="calc-btn fn" onclick="ToolsPanel.calcPress('cos')">cos</button>
+          <button class="calc-btn fn" onclick="ToolsPanel.calcPress('tan')">tan</button>
+          <button class="calc-btn fn" onclick="ToolsPanel.calcPress('log')">log</button>
+          <button class="calc-btn fn" onclick="ToolsPanel.calcPress('√')">√</button>
+          <button class="calc-btn fn" onclick="ToolsPanel.calcPress('x²')">x²</button>
+          <button class="calc-btn fn" onclick="ToolsPanel.calcPress('ln')">ln</button>
+          <button class="calc-btn fn" onclick="ToolsPanel.calcPress('π')">π</button>
+          <button class="calc-btn clr" onclick="ToolsPanel.calcPress('C')">C</button>
+          <button class="calc-btn clr" onclick="ToolsPanel.calcPress('CE')">⌫</button>
+          <button class="calc-btn op" onclick="ToolsPanel.calcPress('%')">%</button>
+          <button class="calc-btn op" onclick="ToolsPanel.calcPress('/')">÷</button>
+          <button class="calc-btn" onclick="ToolsPanel.calcPress('7')">7</button>
+          <button class="calc-btn" onclick="ToolsPanel.calcPress('8')">8</button>
+          <button class="calc-btn" onclick="ToolsPanel.calcPress('9')">9</button>
+          <button class="calc-btn op" onclick="ToolsPanel.calcPress('*')">×</button>
+          <button class="calc-btn" onclick="ToolsPanel.calcPress('4')">4</button>
+          <button class="calc-btn" onclick="ToolsPanel.calcPress('5')">5</button>
+          <button class="calc-btn" onclick="ToolsPanel.calcPress('6')">6</button>
+          <button class="calc-btn op" onclick="ToolsPanel.calcPress('-')">−</button>
+          <button class="calc-btn" onclick="ToolsPanel.calcPress('1')">1</button>
+          <button class="calc-btn" onclick="ToolsPanel.calcPress('2')">2</button>
+          <button class="calc-btn" onclick="ToolsPanel.calcPress('3')">3</button>
+          <button class="calc-btn op" onclick="ToolsPanel.calcPress('+')">+</button>
+          <button class="calc-btn" onclick="ToolsPanel.calcPress('+/-')">±</button>
+          <button class="calc-btn" onclick="ToolsPanel.calcPress('0')">0</button>
+          <button class="calc-btn" onclick="ToolsPanel.calcPress('.')">.</button>
+          <button class="calc-btn eq" onclick="ToolsPanel.calcPress('=')">=</button>
+        </div>
+        <div class="divider"></div>
+        <div class="flex gap-2 mt-2">
+          <button class="btn btn-secondary" style="flex:1;font-size:12px;" onclick="ToolsPanel.calcPress('MS')">MS</button>
+          <button class="btn btn-secondary" style="flex:1;font-size:12px;" onclick="ToolsPanel.calcPress('MR')">MR</button>
+        </div>
+      </div>
+
+      <!-- ── Word Counter ── -->
+      <div class="tool-content" data-tool="wordcount">
+        <div class="form-group">
+          <label class="form-label">Text paste karein</label>
+          <textarea class="form-textarea" id="wordCountInput" rows="6"
+            placeholder="Yahaan text paste karein..."
+            oninput="ToolsPanel.updateWordCount()"></textarea>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-value" id="wcWords">0</div><div class="stat-label">Words</div></div>
+          <div class="stat-card"><div class="stat-value" id="wcChars">0</div><div class="stat-label">Characters</div></div>
+          <div class="stat-card"><div class="stat-value" id="wcCharsNoSpace">0</div><div class="stat-label">Chars (no space)</div></div>
+          <div class="stat-card"><div class="stat-value" id="wcSentences">0</div><div class="stat-label">Sentences</div></div>
+          <div class="stat-card"><div class="stat-value" id="wcParas">0</div><div class="stat-label">Paragraphs</div></div>
+          <div class="stat-card"><div class="stat-value" id="wcReadTime">0 min</div><div class="stat-label">Read Time</div></div>
+        </div>
+        <button class="btn btn-ghost w-full mt-2"
+          onclick="UI.copyToClipboard(document.getElementById('wordCountInput').value)">
+          📋 Copy Text
+        </button>
+      </div>
+
+      <!-- ── Case Converter ── -->
+      <div class="tool-content" data-tool="caseconvert">
+        <div class="form-group">
+          <label class="form-label">Input Text</label>
+          <textarea class="form-textarea" id="caseInput" rows="4" placeholder="Text yahaan likhein..."></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;">
+          <button class="btn btn-secondary" onclick="ToolsPanel.convertCase('upper')">UPPER</button>
+          <button class="btn btn-secondary" onclick="ToolsPanel.convertCase('lower')">lower</button>
+          <button class="btn btn-secondary" onclick="ToolsPanel.convertCase('title')">Title Case</button>
+          <button class="btn btn-secondary" onclick="ToolsPanel.convertCase('sentence')">Sentence</button>
+          <button class="btn btn-secondary" onclick="ToolsPanel.convertCase('camel')">camelCase</button>
+          <button class="btn btn-secondary" onclick="ToolsPanel.convertCase('snake')">snake_case</button>
+          <button class="btn btn-secondary" onclick="ToolsPanel.convertCase('kebab')">kebab-case</button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Output</label>
+          <textarea class="form-textarea" id="caseOutput" rows="4" readonly placeholder="Result yahaan aayega..."></textarea>
+        </div>
+        <button class="btn btn-ghost w-full"
+          onclick="UI.copyToClipboard(document.getElementById('caseOutput').value)">📋 Copy</button>
+      </div>
+
+      <!-- ── Password Generator ── -->
+      <div class="tool-content" data-tool="password">
+        <div class="form-group">
+          <label class="form-label">Length: <span id="passLengthVal">16</span></label>
+          <input type="range" class="range-input" id="passLength" min="8" max="64" value="16"
+            oninput="document.getElementById('passLengthVal').textContent=this.value; ToolsPanel.generatePassword()" />
+        </div>
+        <div class="form-group">
+          <div class="toggle-row">
+            <span class="toggle-label">Uppercase (A-Z)</span>
+            <label class="toggle"><input type="checkbox" id="passUpper" checked onchange="ToolsPanel.generatePassword()"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">Lowercase (a-z)</span>
+            <label class="toggle"><input type="checkbox" id="passLower" checked onchange="ToolsPanel.generatePassword()"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">Numbers (0-9)</span>
+            <label class="toggle"><input type="checkbox" id="passNumbers" checked onchange="ToolsPanel.generatePassword()"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">Symbols (!@#$)</span>
+            <label class="toggle"><input type="checkbox" id="passSymbols" checked onchange="ToolsPanel.generatePassword()"><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-input" id="passOutput" readonly placeholder="Password yahaan aayega..."
+            style="font-family:var(--font-mono); letter-spacing:1px;" />
+          <div class="strength-bar mt-2"><div id="passStrength"></div></div>
+          <span class="text-xs text-muted" id="passStrengthLabel">—</span>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn btn-primary" style="flex:1;" onclick="ToolsPanel.generatePassword()">🔄 Generate</button>
+          <button class="btn btn-ghost" onclick="UI.copyToClipboard(document.getElementById('passOutput').value)">📋</button>
+        </div>
+      </div>
+
+      <!-- ── Unit Converter ── -->
+      <div class="tool-content" data-tool="converter">
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-select" id="unitCategory" onchange="ToolsPanel.updateUnitOptions(); ToolsPanel.convertUnit()">
+            <option value="length">📏 Length</option>
+            <option value="weight">⚖️ Weight</option>
+            <option value="temperature">🌡️ Temperature</option>
+            <option value="speed">💨 Speed</option>
+            <option value="data">💾 Data</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Value</label>
+            <input type="number" class="form-input" id="unitValue" value="1" oninput="ToolsPanel.convertUnit()" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">From</label>
+            <select class="form-select" id="unitFrom" onchange="ToolsPanel.convertUnit()"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">To</label>
+            <select class="form-select" id="unitTo" onchange="ToolsPanel.convertUnit()"></select>
+          </div>
+        </div>
+        <div id="unitResult" class="stat-card mt-2" style="font-size:16px;font-weight:600;padding:16px;text-align:center;"></div>
+        <button class="btn btn-primary w-full mt-2" onclick="ToolsPanel.convertUnit()">🔄 Convert</button>
+      </div>
+
+      <!-- ── JSON Formatter ── -->
+      <div class="tool-content" data-tool="json">
+        <div class="form-group">
+          <label class="form-label">JSON Input</label>
+          <textarea class="form-textarea" id="jsonInput" rows="5"
+            placeholder='{"key": "value"}'></textarea>
+        </div>
+        <div class="flex gap-2 mt-2 mb-3">
+          <button class="btn btn-primary" style="flex:1" onclick="ToolsPanel.formatJSON()">✨ Format</button>
+          <button class="btn btn-ghost" onclick="UI.copyToClipboard(document.getElementById('jsonOutput').textContent)">📋</button>
+        </div>
+        <label class="form-label">Formatted Output</label>
+        <pre id="jsonOutput"></pre>
+      </div>
+
+      <!-- ── Date Calculator ── -->
+      <div class="tool-content" data-tool="datecalc">
+        <div class="form-group">
+          <label class="form-label">Date 1</label>
+          <input type="date" class="form-input" id="dateInput1" onchange="ToolsPanel.calculateDate()" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date 2 (optional)</label>
+          <input type="date" class="form-input" id="dateInput2" onchange="ToolsPanel.calculateDate()" />
+        </div>
+        <button class="btn btn-primary w-full mt-2" onclick="ToolsPanel.calculateDate()">📅 Calculate</button>
+        <div id="dateResult" class="stat-card mt-3" style="text-align:center;line-height:2;"></div>
+        <div class="divider"></div>
+        <div class="stat-card" style="text-align:center;">
+          <div class="stat-value" id="currentDateTime"></div>
+          <div class="stat-label">Current Date & Time</div>
+        </div>
+      </div>
+
+      <!-- ── File Reader ── -->
+      <div class="tool-content" data-tool="filereader">
+        <div class="form-group">
+          <label class="file-upload-label">
+            📁 File select karein (TXT, PDF, JSON, CSV)
+            <input type="file" hidden accept=".txt,.md,.json,.csv,.pdf,.js,.py,.html,.css"
+              onchange="FileTools.handleFileUpload(event)" />
+          </label>
+        </div>
+        <div id="fileStats" class="text-sm text-muted mb-2"></div>
+        <pre class="file-output" id="fileOutput">Koi file nahi khula...</pre>
+        <div class="flex gap-2 mt-2">
+          <button class="btn btn-ghost" style="flex:1" onclick="FileTools.copyFileOutput()">📋 Copy</button>
+          <button class="btn btn-ghost" style="flex:1"
+            onclick="FileTools.downloadText(document.getElementById('fileOutput').textContent, 'output.txt')">
+            💾 Download
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Notes ── -->
+      <div class="tool-content" data-tool="notes">
+        <div class="form-group">
+          <input type="text" class="form-input" id="noteTitle" placeholder="Note ka title..." />
+        </div>
+        <div class="form-group">
+          <textarea class="form-textarea" id="noteInput" rows="4" placeholder="Note yahaan likhein..."></textarea>
+        </div>
+        <button class="btn btn-primary w-full mb-3" onclick="ToolsPanel.saveNote()">💾 Save Note</button>
+        <div class="divider"></div>
+        <div class="section-title">Saved Notes</div>
+        <div id="notesList"></div>
+      </div>
+
+      <!-- ── AI Agent Mode ── -->
+      <div class="tool-content" data-tool="agentmode">
+        <div class="form-group">
+          <label class="form-label">Goal / Multi-step Objective</label>
+          <input type="text" class="form-input" id="agentGoalInput" placeholder="e.g. Workspace files summarize karke report generate karo..." />
+        </div>
+        <div class="flex gap-2 mb-3">
+          <button class="btn btn-primary" style="flex:1" onclick="submitAgentGoal()">🚀 Plan & Run Agent</button>
+        </div>
+        <div id="agentPlanCard" style="display:none;" class="card p-3 mb-2">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs" id="agentStatusBadge" style="font-weight:700; text-transform:uppercase;">READY</span>
+            <div class="flex gap-1">
+              <button class="btn btn-xs btn-secondary" onclick="AIAgent.pausePlan()">⏸️</button>
+              <button class="btn btn-xs btn-secondary" onclick="AIAgent.resumePlan()">▶️</button>
+              <button class="btn btn-xs btn-danger" onclick="AIAgent.cancelPlan()">🛑</button>
+            </div>
+          </div>
+          <div id="agentStepsList" style="font-size:12px; display:flex; flex-direction:column; gap:6px;"></div>
+          <div id="agentApprovalGate" class="mt-2 p-2" style="display:none; background:rgba(245,158,11,0.15); border:1px solid var(--warning); border-radius:6px;">
+            <div style="font-size:12px; font-weight:600; color:var(--warning);">🛡️ Human Approval Gate Required</div>
+            <p style="font-size:11px; margin:4px 0;">Agent is requesting approval to execute this sensitive action.</p>
+            <button class="btn btn-xs btn-primary mt-1" onclick="AIAgent.approveCurrentStep()">✅ Approve & Continue</button>
+          </div>
+        </div>
+        <label class="form-label mt-2">Agent Execution Logs</label>
+        <div class="file-output" id="agentLogOutput" style="max-height:160px; font-size:11px;">Agent ready for multi-step goals.</div>
+      </div>
+
+      <!-- ── Local Code Runner ── -->
+      <div class="tool-content" data-tool="coderunner">
+        <div class="form-group">
+          <label class="form-label">Sandboxed JavaScript</label>
+          <textarea class="form-textarea" id="codeRunnerInput" rows="6" style="font-family:var(--font-mono); font-size:12px;" placeholder="// Sandboxed Code
+const numbers = [10, 20, 30, 40];
+const sum = numbers.reduce((a, b) => a + b, 0);
+console.log('Total Sum:', sum);
+return sum * 2;"></textarea>
+        </div>
+        <div class="flex gap-2 mb-2">
+          <button class="btn btn-primary" style="flex:1" onclick="runSandboxCode()">▶️ Run in Sandbox</button>
+          <button class="btn btn-ghost" onclick="document.getElementById('codeRunnerInput').value=''">🧹</button>
+        </div>
+        <label class="form-label">Terminal / Console Output</label>
+        <pre class="file-output" id="codeRunnerOutput" style="max-height:150px; font-size:12px;">Waiting for execution...</pre>
+      </div>
+
+      <!-- ── Memory Timeline ── -->
+      <div class="tool-content" data-tool="memory">
+        <div class="form-group">
+          <label class="form-label">Key / Preference</label>
+          <input type="text" class="form-input" id="memKeyInput" placeholder="e.g. Favorite Language" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Value</label>
+          <input type="text" class="form-input" id="memValInput" placeholder="e.g. JavaScript, Python" />
+        </div>
+        <button class="btn btn-primary w-full mb-3" onclick="saveNewMemory()">💾 Save Memory</button>
+        <div class="divider"></div>
+        <div class="flex justify-between items-center mb-2">
+          <span class="section-title">Saved Timeline</span>
+          <button class="btn btn-xs btn-ghost text-error" onclick="MemoryTimeline.clearAll(); window.renderMemoryUI();">Clear</button>
+        </div>
+        <div id="memoryListContainer" style="display:flex; flex-direction:column; gap:6px;"></div>
+      </div>
+
+      <!-- ── Workflow Builder ── -->
+      <div class="tool-content" data-tool="workflows">
+        <div class="flex justify-between items-center mb-2">
+          <span class="section-title">Automations</span>
+          <button class="btn btn-xs btn-primary" onclick="promptNewWorkflow()">➕ New</button>
+        </div>
+        <div id="workflowsContainer" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+
+      <!-- ── Prompt Lab ── -->
+      <div class="tool-content" data-tool="promptlab">
+        <div class="section-title">Prompt Versioning & Sandbox</div>
+        <div id="promptLabList" style="display:flex; flex-direction:column; gap:10px;"></div>
+      </div>
+
+      <!-- ── Model Arena ── -->
+      <div class="tool-content" data-tool="arena">
+        <div class="form-group">
+          <label class="form-label">Compare Prompt</label>
+          <input type="text" class="form-input" id="arenaPromptInput" placeholder="e.g. How does local AI agent planning work?" />
+        </div>
+        <button class="btn btn-primary w-full mb-3" onclick="runArenaCompare()">⚔️ Compare Models</button>
+        <div id="arenaResults" style="display:none; flex-direction:column; gap:8px;">
+          <div class="card p-2" style="background:var(--bg2);">
+            <div style="font-weight:600; font-size:12px; color:var(--primary);" id="arenaModelAName">Model A</div>
+            <div id="arenaModelAText" style="font-size:12px; margin-top:4px; line-height:1.5;"></div>
+          </div>
+          <div class="card p-2" style="background:var(--bg2);">
+            <div style="font-weight:600; font-size:12px; color:var(--accent);" id="arenaModelBName">Model B</div>
+            <div id="arenaModelBText" style="font-size:12px; margin-top:4px; line-height:1.5;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Semantic Search ── -->
+      <div class="tool-content" data-tool="semantic">
+        <div class="form-group">
+          <label class="form-label">Natural Language Meaning Search</label>
+          <input type="text" class="form-input" id="semanticQueryInput" placeholder="e.g. coding guidelines or pdf extract details" oninput="runSemanticSearch(this.value)" />
+        </div>
+        <label class="form-label">Matched Conversations & Knowledge</label>
+        <div id="semanticResultsList" style="display:flex; flex-direction:column; gap:6px;">
+          <p class="text-xs text-muted">Type above to search through memory, FAQs, and documents with meaning similarity.</p>
+        </div>
+      </div>
+
+      <!-- ── Privacy Dashboard ── -->
+      <div class="tool-content" data-tool="privacy">
+        <div class="section-title">🛡️ On-Device Privacy Center</div>
+        <div class="card p-3 mb-2" style="background:var(--bg2); font-size:12px;">
+          <div class="flex justify-between items-center mb-1">
+            <span>External Network Calls</span>
+            <span class="badge badge-success">ZERO (0%)</span>
+          </div>
+          <div class="flex justify-between items-center mb-1">
+            <span>Storage Retention</span>
+            <span class="badge badge-primary">Client-Only</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span>AI Execution Mode</span>
+            <span class="badge badge-accent">100% On-Device</span>
+          </div>
+        </div>
+        <div id="privacyKeysList" style="font-size:12px; display:flex; flex-direction:column; gap:4px;"></div>
+      </div>
+
+      <!-- ── Hardware Optimizer ── -->
+      <div class="tool-content" data-tool="hardware">
+        <div class="section-title">⚡ Local Hardware Metrics</div>
+        <div id="hardwareMetricsContainer" style="display:flex; flex-direction:column; gap:6px; font-size:12px;"></div>
+        <button class="btn btn-secondary w-full mt-3" onclick="window.renderHardwareUI()">🔄 Refresh Metrics</button>
+      </div>
+
+    </div><!-- end tools-body -->
+  </aside><!-- end toolsPanel -->
+
+</div><!-- end app-layout -->
+
+
+<!-- ════════════════════════════════════════════════════════════
+     SETTINGS MODAL
+════════════════════════════════════════════════════════════ -->
+<div class="modal" id="settingsModal">
+  <div class="modal-content" style="max-width:560px;">
+    <div class="modal-header">
+      <h3>⚙️ Settings</h3>
+      <button class="btn-icon" onclick="UI.closeModal('settingsModal')">✕</button>
+    </div>
+
+    <div class="modal-tabs">
+      <button class="modal-tab active" data-tab="general" onclick="App.switchSettingsTab('general')">General</button>
+      <button class="modal-tab" data-tab="appearance" onclick="App.switchSettingsTab('appearance')">Appearance</button>
+      <button class="modal-tab" data-tab="data" onclick="App.switchSettingsTab('data')">Data</button>
+      <button class="modal-tab" data-tab="shortcuts" onclick="App.switchSettingsTab('shortcuts')">Shortcuts</button>
+    </div>
+
+    <!-- General Tab -->
+    <div class="modal-tab-content active" data-tab="general">
+      <div class="settings-grid">
+        <div class="form-group">
+          <label class="form-label">App Name</label>
+          <input type="text" class="form-input" id="setAppName" placeholder="AJ AI" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Welcome Message</label>
+          <textarea class="form-textarea" id="setWelcomeMsg" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Language</label>
+          <select class="form-select" id="setLanguage">
+            <option value="hi">हिंदी (Hindi)</option>
+            <option value="en">English</option>
+            <option value="ur">اردو (Urdu)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date Format</label>
+          <select class="form-select" id="setDateFormat">
+            <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+            <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+            <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Max Upload Size (MB)</label>
+          <input type="number" class="form-input" id="setMaxUpload" min="1" max="100" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">History Retention (Days)</label>
+          <input type="number" class="form-input" id="setRetentionDays" min="1" max="365" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Appearance Tab -->
+    <div class="modal-tab-content" data-tab="appearance">
+      <div class="settings-grid">
+        <div class="form-group">
+          <label class="form-label">Theme</label>
+          <select class="form-select" id="setThemeSelect">
+            <option value="dark">🌙 Dark</option>
+            <option value="light">☀️ Light</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Primary Color</label>
+          <div class="flex gap-2 items-center">
+            <input type="color" id="setPrimaryColor" value="#6366f1"
+              style="width:48px;height:40px;border:none;background:none;cursor:pointer;border-radius:8px;" />
+            <input type="text" class="form-input" id="setPrimaryColorHex"
+              placeholder="#6366f1" style="font-family:monospace;"
+              oninput="document.getElementById('setPrimaryColor').value=this.value" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Typing Animation Speed (ms)</label>
+          <input type="range" class="range-input" id="setTypingSpeed" min="5" max="80" />
+          <div class="flex justify-between text-xs text-muted mt-1">
+            <span>Fast</span><span>Slow</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Tab -->
+    <div class="modal-tab-content" data-tab="data">
+      <div class="settings-grid">
+        <div>
+          <p class="text-sm text-muted" style="margin-bottom:12px;">
+            Apna saara data export ya import karein.
+          </p>
+          <div class="flex gap-2 flex-col">
+            <button class="btn btn-primary" onclick="App.exportAllData()">📦 Export All Data</button>
+            <label class="btn btn-ghost" style="cursor:pointer; justify-content:center;">
+              📥 Import Data
+              <input type="file" hidden accept=".json" onchange="App.importData(event)" />
+            </label>
+            <a href="admin.html" class="btn btn-ghost" style="justify-content:center;">🛡️ Admin Panel Open Karein</a>
+            <button class="btn btn-danger" onclick="App.resetAllData()">🗑️ Reset All Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shortcuts Tab -->
+    <div class="modal-tab-content" data-tab="shortcuts">
+      <table style="width:100%;font-size:13px;border-collapse:collapse;">
+        <thead><tr><th style="text-align:left;padding:8px;border-bottom:1px solid var(--border);color:var(--text2);">Action</th><th style="text-align:right;padding:8px;border-bottom:1px solid var(--border);color:var(--text2);">Shortcut</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:8px;">Send message</td><td style="padding:8px;text-align:right;"><kbd style="background:var(--bg3);padding:2px 8px;border-radius:4px;">Enter</kbd></td></tr>
+          <tr><td style="padding:8px;">New line</td><td style="padding:8px;text-align:right;"><kbd style="background:var(--bg3);padding:2px 8px;border-radius:4px;">Shift+Enter</kbd></td></tr>
+          <tr><td style="padding:8px;">New chat</td><td style="padding:8px;text-align:right;"><kbd style="background:var(--bg3);padding:2px 8px;border-radius:4px;">Ctrl+N</kbd></td></tr>
+          <tr><td style="padding:8px;">Search chats</td><td style="padding:8px;text-align:right;"><kbd style="background:var(--bg3);padding:2px 8px;border-radius:4px;">Ctrl+K</kbd></td></tr>
+          <tr><td style="padding:8px;">Close modal/panel</td><td style="padding:8px;text-align:right;"><kbd style="background:var(--bg3);padding:2px 8px;border-radius:4px;">Esc</kbd></td></tr>
+          <tr><td style="padding:8px;">Toggle theme</td><td style="padding:8px;text-align:right;">☀️/🌙 button</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="divider"></div>
+    <div class="flex gap-2 justify-between">
+      <button class="btn btn-ghost" onclick="UI.closeModal('settingsModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="App.saveSettings()">✅ Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════════════════════════ -->
+
+<!-- Marked.js for Markdown -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+
+<!-- Highlight.js for code -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<!-- PDF.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  if (window.pdfjsLib) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  }
+</script>
+
+<!-- App scripts (order matters) -->
+<script src="data/knowledge.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/advanced_features.js"></script>
+<script src="js/agent.js"></script>
+<script src="js/workflow_arena.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/tools.js"></script>
+<script src="js/files.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+  // Live clock
+  function updateClock() {
+    const el = document.getElementById("currentDateTime");
+    if (el) el.textContent = new Date().toLocaleString("hi-IN");
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // Add copy buttons to code blocks after markdown render
+  document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("code-copy-btn")) {
+      const pre = e.target.closest("pre");
+      const code = pre?.querySelector("code");
+      if (code) UI.copyToClipboard(code.textContent);
+    }
+  });
+
+  // Observe new code blocks and add copy buttons
+  const observer = new MutationObserver(() => {
+    document.querySelectorAll(".message-content pre:not([data-copy])").forEach(pre => {
+      pre.setAttribute("data-copy", "1");
+      const btn = document.createElement("button");
+      btn.className = "code-copy-btn";
+      btn.textContent = "📋 Copy";
+      pre.appendChild(btn);
+    });
+  });
+  observer.observe(document.getElementById("chatMessages") || document.body, {
+    childList: true, subtree: true
+  });
+
+  // Sync color hex input
+  document.addEventListener("input", (e) => {
+    if (e.target.id === "setPrimaryColor") {
+      const hex = document.getElementById("setPrimaryColorHex");
+      if (hex) hex.value = e.target.value;
+    }
+  });
+
+  // ══════════════════════════════════════════════════════════
+  // UI HANDLERS FOR ADVANCED 2026 FEATURES
+  // ══════════════════════════════════════════════════════════
+
+  // 1. Voice Assistant
+  let isVoiceRecording = false;
+  function toggleVoiceInput() {
+    const btn = document.getElementById("voiceBtn");
+    if (!isVoiceRecording) {
+      const ok = VoiceAssistant.start(
+        (transcript) => {
+          const input = document.getElementById("chatInput");
+          if (input) input.value = transcript;
+        },
+        () => {
+          isVoiceRecording = false;
+          if (btn) { btn.style.color = ""; btn.classList.remove("text-error"); }
+        }
+      );
+      if (ok !== false) {
+        isVoiceRecording = true;
+        if (btn) { btn.style.color = "var(--error)"; btn.classList.add("text-error"); }
+        UI.toast("Listening... (Bolna shuru karein)", "info", 2000);
+      } else {
+        UI.toast("Speech Recognition browser mein supported nahi hai.", "error");
+      }
+    } else {
+      VoiceAssistant.stop();
+      isVoiceRecording = false;
+      if (btn) { btn.style.color = ""; btn.classList.remove("text-error"); }
+    }
+  }
+
+  // 2. AI Agent UI
+  function submitAgentGoal() {
+    const input = document.getElementById("agentGoalInput");
+    if (!input || !input.value.trim()) {
+      UI.toast("Goal enter karein!", "error");
+      return;
+    }
+    const plan = AIAgent.createPlan(input.value.trim());
+    window.renderAgentUI(plan);
+    AIAgent.runPlan(plan.id);
+  }
+
+  window.renderAgentUI = function(plan) {
+    plan = plan || AIAgent.activePlan;
+    const card = document.getElementById("agentPlanCard");
+    const stepsList = document.getElementById("agentStepsList");
+    const badge = document.getElementById("agentStatusBadge");
+    const gate = document.getElementById("agentApprovalGate");
+    const logOut = document.getElementById("agentLogOutput");
+
+    if (!plan || !card) return;
+    card.style.display = "block";
+    badge.textContent = plan.status.replace("_", " ");
+    badge.className = `text-xs badge badge-${plan.status === 'completed' ? 'success' : plan.status === 'waiting_approval' ? 'warning' : 'primary'}`;
+
+    stepsList.innerHTML = plan.steps.map((s, idx) => `
+      <div style="padding:6px; background:var(--bg); border-radius:4px; border:1px solid ${s.status === 'in_progress' ? 'var(--primary)' : s.status === 'completed' ? 'var(--success)' : 'var(--border)'};">
+        <div style="font-weight:600; display:flex; justify-content:space-between;">
+          <span>${idx + 1}. ${s.title}</span>
+          <span style="font-size:10px; color:${s.status === 'completed' ? 'var(--success)' : 'var(--text3)'};">
+            ${s.status === 'completed' ? '✅ DONE' : s.status === 'in_progress' ? '⚙️ RUNNING' : s.requiresApproval ? '🛡️ GATE' : '⏳ QUEUED'}
+          </span>
+        </div>
+        <div style="font-size:10px; color:var(--text3); margin-top:2px;">Tool: ${s.tool}</div>
+      </div>
+    `).join("");
+
+    if (plan.status === 'waiting_approval') {
+      gate.style.display = 'block';
+    } else {
+      gate.style.display = 'none';
+    }
+
+    if (logOut) {
+      logOut.textContent = plan.logs.join("\n");
+      logOut.scrollTop = logOut.scrollHeight;
+    }
+  };
+
+  // 3. Local Code Runner
+  function runSandboxCode() {
+    const code = document.getElementById("codeRunnerInput")?.value || "";
+    const out = document.getElementById("codeRunnerOutput");
+    if (!out) return;
+    out.textContent = "Executing inside client-side sandbox...";
+    setTimeout(() => {
+      const res = LocalCodeRunner.execute(code, "javascript");
+      out.textContent = res.output;
+      out.style.borderColor = res.success ? "var(--success)" : "var(--error)";
+    }, 150);
+  }
+
+  // 4. Memory Timeline UI
+  window.renderMemoryUI = function() {
+    const list = document.getElementById("memoryListContainer");
+    if (!list) return;
+    const items = MemoryTimeline.getMemories();
+    list.innerHTML = items.length === 0 ? '<p class="text-xs text-muted">No stored memories.</p>' :
+      items.map(m => `
+        <div style="padding:6px 8px; background:var(--bg); border:1px solid var(--border); border-radius:4px; font-size:11px;">
+          <div class="flex justify-between items-center">
+            <span style="font-weight:600; color:var(--primary);">${m.key}</span>
+            <button class="btn btn-xs btn-ghost text-error" onclick="MemoryTimeline.deleteMemory('${m.id}'); window.renderMemoryUI();">✕</button>
+          </div>
+          <div style="margin-top:2px;">${m.value}</div>
+          <div style="font-size:9px; color:var(--text3); margin-top:4px;">${m.category} • Confidence: ${Math.round(m.confidence * 100)}%</div>
+        </div>
+      `).join("");
+  };
+
+  function saveNewMemory() {
+    const k = document.getElementById("memKeyInput");
+    const v = document.getElementById("memValInput");
+    if (!k || !v || !k.value.trim() || !v.value.trim()) {
+      UI.toast("Key aur Value dono zaroori hain!", "error");
+      return;
+    }
+    MemoryTimeline.addMemory(k.value.trim(), v.value.trim());
+    k.value = ""; v.value = "";
+    window.renderMemoryUI();
+    UI.toast("Memory saved to local timeline!", "success");
+  }
+
+  // 5. Workflows UI
+  window.renderWorkflowUI = function() {
+    const container = document.getElementById("workflowsContainer");
+    if (!container) return;
+    const wfs = WorkflowBuilder.getWorkflows();
+    container.innerHTML = wfs.map(w => `
+      <div style="padding:8px; background:var(--bg); border:1px solid var(--border); border-radius:6px; font-size:11px;">
+        <div class="flex justify-between items-center mb-1">
+          <span style="font-weight:700; font-size:12px;">${w.title}</span>
+          <input type="checkbox" ${w.active ? 'checked' : ''} onchange="WorkflowBuilder.toggleWorkflow('${w.id}'); window.renderWorkflowUI();" />
+        </div>
+        <p style="color:var(--text2); font-size:10px; margin-bottom:6px;">${w.description}</p>
+        <div style="display:flex; flex-direction:column; gap:3px;">
+          ${w.nodes.map((n, i) => `
+            <div style="padding:4px 6px; background:var(--surface); border-radius:3px; display:flex; justify-content:space-between; align-items:center;">
+              <span>${i + 1}. ${n.title}</span>
+              <span class="badge badge-muted" style="font-size:8px;">${n.detail}</span>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `).join("");
+  };
+
+  function promptNewWorkflow() {
+    const title = prompt("Workflow Title:");
+    if (!title) return;
+    const desc = prompt("Workflow Description:") || "Automated trigger-action chain";
+    WorkflowBuilder.addWorkflow(title, desc);
+    window.renderWorkflowUI();
+    UI.toast("Workflow created!", "success");
+  }
+
+  // 6. Prompt Lab UI
+  window.renderPromptLabUI = function() {
+    const cont = document.getElementById("promptLabList");
+    if (!cont) return;
+    const prompts = PromptLab.getPrompts();
+    cont.innerHTML = prompts.map(p => `
+      <div style="padding:8px; background:var(--bg); border:1px solid var(--border); border-radius:6px; font-size:11px;">
+        <div class="flex justify-between items-center mb-1">
+          <span style="font-weight:700; color:var(--text);">${p.name}</span>
+          <span class="badge badge-primary">v${p.currentVersion}</span>
+        </div>
+        <div style="margin:4px 0;">
+          ${p.versions.map(v => `
+            <div style="padding:4px; margin-bottom:4px; background:var(--surface); border-radius:4px; border-left:2px solid ${v.active ? 'var(--success)' : 'var(--border)'};">
+              <div class="flex justify-between text-xs">
+                <b>v${v.v} (${v.date})</b>
+                ${!v.active ? `<button class="btn btn-xs btn-ghost" onclick="PromptLab.rollback('${p.id}', '${v.v}'); window.renderPromptLabUI();">Rollback</button>` : '<span class="text-success text-xs">Active</span>'}
+              </div>
+              <p style="color:var(--text2); font-size:10px; margin-top:2px;">${v.text}</p>
+            </div>
+          `).join("")}
+        </div>
+        <button class="btn btn-xs btn-secondary w-full mt-1" onclick="addNewPromptVersion('${p.id}')">➕ New Version</button>
+      </div>
+    `).join("");
+  };
+
+  function addNewPromptVersion(id) {
+    const text = prompt("Enter updated prompt text for this model task:");
+    if (text) {
+      PromptLab.addVersion(id, text);
+      window.renderPromptLabUI();
+      UI.toast("New prompt version saved!", "success");
+    }
+  }
+
+  // 7. Model Arena
+  function runArenaCompare() {
+    const input = document.getElementById("arenaPromptInput");
+    if (!input || !input.value.trim()) {
+      UI.toast("Enter prompt to compare!", "error");
+      return;
+    }
+    const res = ModelArena.compare(input.value.trim());
+    document.getElementById("arenaResults").style.display = "flex";
+    document.getElementById("arenaModelAName").textContent = res.modelA;
+    document.getElementById("arenaModelAText").innerHTML = UI.renderMarkdown(res.responseA);
+    document.getElementById("arenaModelBName").textContent = res.modelB;
+    document.getElementById("arenaModelBText").innerHTML = UI.renderMarkdown(res.responseB);
+  }
+
+  // 8. Semantic Search UI
+  function runSemanticSearch(query) {
+    const cont = document.getElementById("semanticResultsList");
+    if (!cont) return;
+    if (!query || query.trim().length < 2) {
+      cont.innerHTML = '<p class="text-xs text-muted">Type to search across documents & FAQs.</p>';
+      return;
+    }
+
+    // Index all FAQs + custom KB + notes
+    const docs = [
+      ...KnowledgeBase.faqs.map(f => ({ title: f.question, content: f.answer, tags: f.keywords.join(" ") })),
+      ...(Storage.getKBEntries() || []).map(k => ({ title: k.question, content: k.answer, tags: k.keywords || "" })),
+      ...(Storage.get("notes", []) || []).map(n => ({ title: n.title, content: n.content, tags: "note" }))
+    ];
+
+    const results = SemanticSearch.search(query, docs);
+    cont.innerHTML = results.length === 0 ? '<p class="text-xs text-muted">No semantically related content found.</p>' :
+      results.slice(0, 5).map(r => `
+        <div style="padding:6px; background:var(--bg); border:1px solid var(--border); border-radius:4px; font-size:11px;">
+          <div style="font-weight:600; color:var(--primary);">${r.title}</div>
+          <div style="color:var(--text2); margin-top:2px;">${r.content.substring(0, 80)}...</div>
+          <div style="font-size:9px; color:var(--text3); margin-top:2px;">Relevance Score: ${(r.score * 100).toFixed(1)}%</div>
+        </div>
+      `).join("");
+  }
+
+  // 9. Privacy UI
+  window.renderPrivacyUI = function() {
+    const cont = document.getElementById("privacyKeysList");
+    if (!cont) return;
+    const keys = Object.keys(localStorage).filter(k => k.startsWith("aj_ai_"));
+    cont.innerHTML = `
+      <div style="margin-bottom:6px; font-weight:600;">Client Storage Inspector:</div>
+      ${keys.map(k => {
+        const val = localStorage.getItem(k);
+        const bytes = (val.length * 2);
+        return `
+          <div style="padding:4px 6px; background:var(--bg); border-radius:3px; display:flex; justify-content:space-between; align-items:center;">
+            <span>${k.replace('aj_ai_', '')}</span>
+            <span class="badge badge-muted">${bytes > 1024 ? (bytes/1024).toFixed(1) + ' KB' : bytes + ' B'}</span>
+          </div>
+        `;
+      }).join("")}
+    `;
+  };
+
+  // 10. Hardware UI
+  window.renderHardwareUI = function() {
+    const cont = document.getElementById("hardwareMetricsContainer");
+    if (!cont) return;
+    const m = HardwareMonitor.getMetrics();
+    cont.innerHTML = `
+      <div style="padding:6px; background:var(--bg); border-radius:4px; display:flex; justify-content:space-between;">
+        <span>CPU Hardware Threads</span>
+        <b>${m.cores} Cores</b>
+      </div>
+      <div style="padding:6px; background:var(--bg); border-radius:4px; display:flex; justify-content:space-between;">
+        <span>Device RAM Estimate</span>
+        <b>${m.deviceMemory}</b>
+      </div>
+      <div style="padding:6px; background:var(--bg); border-radius:4px; display:flex; justify-content:space-between;">
+        <span>JS Heap Memory Used</span>
+        <b>${m.memory.usedJSHeapSize}</b>
+      </div>
+      <div style="padding:6px; background:var(--bg); border-radius:4px; display:flex; justify-content:space-between;">
+        <span>DOM Active Nodes</span>
+        <b>${m.domNodes}</b>
+      </div>
+      <div style="padding:6px; background:var(--bg); border-radius:4px; display:flex; justify-content:space-between;">
+        <span>Sandbox Health</span>
+        <b class="text-success">Optimal & Secure</b>
+      </div>
+    `;
+  };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cyber">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+    <meta name="theme-color" content="#090d1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>AJ AI — Smart Hindi, Haryanvi & English AI Assistant</title>
+    <meta name="description" content="AJ AI - Hindi, Haryanvi aur English AI Assistant with Real-Time Voice & Dynamic Themes.">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="app" id="app">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-header">
+            <div class="brand">
+                <div class="brand-logo">AJ</div>
+                <div class="brand-text">
+                    <strong>AJ AI</strong>
+                    <span>
+                        <i class="online-dot"></i>
+                        Hindi • Haryanvi • Eng
+                    </span>
+                </div>
+            </div>
+
+            <button class="sidebar-close" id="sidebarClose" type="button" aria-label="Close sidebar">
+                ✕
+            </button>
+        </div>
+
+        <div class="sidebar-content">
+            <button class="new-chat-btn" id="newChatBtn" type="button">
+                <span>＋</span>
+                New Chat
+            </button>
+
+            <div class="search-box">
+                <span class="search-icon">⌕</span>
+                <input type="text" id="searchInput" placeholder="Search conversations..." autocomplete="off">
+            </div>
+
+            <div class="history-title">
+                RECENT CONVERSATIONS
+            </div>
+
+            <div class="chat-history" id="historyList">
+                <div class="empty-history">
+                    No chats yet
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-bottom">
+            <button class="sidebar-btn" id="themeModalOpenBtn" type="button">
+                🎨 Wallpaper & Themes
+            </button>
+
+            <button class="sidebar-btn danger-btn" id="clearHistoryBtn" type="button">
+                🗑️ Clear All Chats
+            </button>
+
+            <a class="sidebar-btn" href="/admin/login">
+                ⚙️ Admin Dashboard
+            </a>
+        </div>
+
+    </aside>
+
+    <!-- Mobile overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ================= MAIN CHAT AREA ================= -->
+    <main class="main" id="mainContainer">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <!-- Desktop Sidebar Toggle -->
+                <button class="icon-btn desktop-toggle-btn" id="desktopToggleBtn" type="button" title="Toggle Sidebar">
+                    ☰
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Open menu">
+                    ☰
+                </button>
+
+                <div class="chat-user">
+                    <div class="avatar">AJ</div>
+                    <div class="chat-user-info">
+                        <strong>AJ AI Assistant</strong>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span><i class="online-dot"></i> Online</span>
+                            <div class="topbar-kb-pill" id="topbarKbPill" title="Knowledge Base Status">
+                                <span class="kb-glow-dot"></span>
+                                <span id="topbarKbText">Doc AI Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="top-actions">
+                <!-- Voice Language Selector -->
+                <button class="lang-toggle-btn" id="langToggleBtn" type="button" title="Voice Language: Hindi / English">
+                    <span id="langFlag">🇮🇳</span> <span id="langText">HI</span>
+                </button>
+
+                <!-- Auto-Speech Toggle -->
+                <button class="icon-btn" id="autoSpeechBtn" type="button" title="Auto Read Answers: OFF">
+                    🔇
+                </button>
+
+                <!-- Wallpaper Theme Toggle Button -->
+                <button class="icon-btn" id="themePickerBtn" type="button" title="Wallpaper Themes">
+                    🎨
+                </button>
+            </div>
+        </header>
+
+        <!-- ================= CHAT SCROLL AREA ================= -->
+        <section class="chat-area" id="chatArea">
+
+            <!-- WELCOME HERO -->
+            <div class="welcome" id="welcome">
+                <div class="welcome-icon">AJ</div>
+
+                <h1>Ram Ram! How can I help you?</h1>
+                <p>Poochiye koi bhi question in <strong>Hindi</strong>, <strong>हरियाणवी (Desi)</strong>, ya <strong>English</strong>. Mic par click karke voice se boliye!</p>
+
+                <div class="suggestions">
+                    <button class="suggestion" type="button" data-question="Ram Ram bhai, ke haal chaal se?">
+                        🌾 Ram Ram bhai, ke haal se?
+                    </button>
+
+                    <button class="suggestion" type="button" data-question="Python kya hai aur kaise kaam karta hai?">
+                        🐍 Python kya hai?
+                    </button>
+
+                    <button class="suggestion" type="button" data-question="What is Artificial Intelligence?">
+                        🤖 What is AI?
+                    </button>
+
+                    <button class="suggestion" type="button" data-question="Tu kaun se ladle? Apne baare me bata.">
+                        ⚡ Tu kaun se ladle?
+                    </button>
+                </div>
+            </div>
+
+            <!-- MESSAGES CONTAINER -->
+            <div class="messages" id="messages"></div>
+
+        </section>
+
+        <!-- ================= LIVE VOICE RECORDING OVERLAY ================= -->
+        <div class="voice-modal" id="voiceModal">
+            <div class="voice-modal-content">
+                <div class="voice-wave-container">
+                    <div class="voice-wave-bar"></div>
+                    <div class="voice-wave-bar"></div>
+                    <div class="voice-wave-bar"></div>
+                    <div class="voice-wave-bar"></div>
+                    <div class="voice-wave-bar"></div>
+                </div>
+
+                <div class="voice-status-title">Listening... Speak now</div>
+                <div class="voice-live-text" id="voiceLiveText">"Bolna shuru karein..."</div>
+
+                <div class="voice-modal-actions">
+                    <button type="button" class="voice-cancel-btn" id="voiceCancelBtn">✕ Cancel</button>
+                    <button type="button" class="voice-done-btn" id="voiceDoneBtn">➤ Send Voice</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= WALLPAPER THEME PICKER MODAL ================= -->
+        <div class="theme-modal" id="themeModal">
+            <div class="theme-modal-content">
+                <div class="theme-modal-header">
+                    <h3 style="font-size: 17px; font-weight: 700;">🎨 Wallpaper & Themes</h3>
+                    <button type="button" class="icon-btn" id="themeModalCloseBtn">✕</button>
+                </div>
+
+                <p style="font-size: 13px; color: var(--muted);">Apna favourite background aur theme choose karein:</p>
+
+                <div class="theme-grid">
+                    <button class="theme-option" data-set-theme="cyber">
+                        <span class="theme-dot" style="background: #6366f1;"></span> 🌌 Cyber Neon
+                    </button>
+                    <button class="theme-option" data-set-theme="ocean">
+                        <span class="theme-dot" style="background: #0284c7;"></span> 🌊 Deep Ocean
+                    </button>
+                    <button class="theme-option" data-set-theme="purple">
+                        <span class="theme-dot" style="background: #a855f7;"></span> 🔮 Nebula Purple
+                    </button>
+                    <button class="theme-option" data-set-theme="matrix">
+                        <span class="theme-dot" style="background: #10b981;"></span> 🌿 Matrix Green
+                    </button>
+                    <button class="theme-option" data-set-theme="sunset">
+                        <span class="theme-dot" style="background: #f97316;"></span> 🌅 Sunset Amber
+                    </button>
+                    <button class="theme-option" data-set-theme="light">
+                        <span class="theme-dot" style="background: #ffffff; border:1px solid #ccc;"></span> ☀️ Clean Light
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= FULLSCREEN DRAG & DROP OVERLAY ================= -->
+        <div class="chat-drag-overlay" id="chatDragOverlay">
+            <div class="chat-drag-card">
+                <div class="chat-drag-icon">⚡</div>
+                <h3>Drop Document Here to Feed AI</h3>
+                <p>AI will analyze & index your document instantly (PDF, Word, Code, TXT, CSV)</p>
+            </div>
+        </div>
+
+        <!-- ================= INPUT SECTION ================= -->
+        <section class="input-section" id="inputSection">
+
+            <!-- Context Mode Banner (shown when file is loaded) -->
+            <div class="context-banner" id="contextBanner" style="display:none;">
+                <span class="context-banner-icon">📄</span>
+                <span id="contextBannerText">File loaded — Context mode ON</span>
+                <button type="button" class="context-clear-btn" id="contextClearBtn" title="Clear file context">✕ Clear</button>
+            </div>
+
+            <!-- Quick Action Prompt Chips -->
+            <div class="prompt-chips" id="promptChips">
+                <button type="button" class="chip-btn" data-prompt="Summarize all uploaded documents in key points">
+                    📋 Summarize Docs
+                </button>
+                <button type="button" class="chip-btn" data-prompt="What are the main topics and important rules?">
+                    💡 Key Highlights
+                </button>
+                <button type="button" class="chip-btn" data-prompt="Explain step-by-step procedure and how-to">
+                    🔍 Steps & How-To
+                </button>
+                <button type="button" class="chip-btn" data-prompt="Frequently asked questions and answers from the documents">
+                    ❓ Document FAQ
+                </button>
+            </div>
+
+            <form class="input-wrapper" id="chatForm" autocomplete="off">
+                <div class="input-box">
+                    <textarea
+                        id="message"
+                        name="message"
+                        rows="1"
+                        maxlength="5000"
+                        placeholder="Message AJ AI... (Hindi / Haryanvi / English)"
+                        autocomplete="off"
+                        enterkeyhint="send"
+                    ></textarea>
+
+                    <!-- File/Screenshot Upload Button -->
+                    <button
+                        type="button"
+                        class="input-icon attach-btn"
+                        id="attachBtn"
+                        title="Upload File / Screenshot / Paragraph"
+                        aria-label="Upload file or paste text">
+                        📎
+                    </button>
+
+                    <button
+                        type="button"
+                        class="input-icon mic-btn"
+                        id="micBtn"
+                        title="Voice Input (Mic)"
+                        aria-label="Voice input">
+                        🎙️
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="send-btn"
+                        id="send"
+                        title="Send message"
+                        aria-label="Send message">
+                        ➤
+                    </button>
+                </div>
+
+                <div class="input-hint">
+                    Enter = Send • Shift + Enter = New line • 📎 File/Screenshot • 🎙️ Voice
+                </div>
+            </form>
+
+            <div class="disclaimer">
+                AJ AI • Hindi, हरियाणवी & English AI
+            </div>
+
+        </section>
+
+        <!-- ================= FILE UPLOAD / CONTEXT MODAL ================= -->
+        <div class="context-modal" id="contextModal">
+            <div class="context-modal-content">
+                <div class="context-modal-header">
+                    <h3>📎 File / Screenshot / Paragraph</h3>
+                    <button type="button" class="icon-btn" id="contextModalCloseBtn">✕</button>
+                </div>
+
+                <p class="context-modal-desc">
+                    File, screenshot ya paragraph do — AJ AI uske baare mein questions ka jawab dega!
+                </p>
+
+                <!-- Tab switcher -->
+                <div class="context-tabs">
+                    <button class="context-tab active" data-tab="file">📁 File Upload</button>
+                    <button class="context-tab" data-tab="text">📝 Paste Text</button>
+                </div>
+
+                <!-- File Upload Tab -->
+                <div class="context-tab-content" id="tabFile">
+                    <div class="file-drop-zone" id="fileDropZone">
+                        <div class="file-drop-icon">📂</div>
+                        <div class="file-drop-text">
+                            <strong>Drag & Drop file yahan</strong><br>
+                            <span>ya click karke select karo</span>
+                        </div>
+                        <div class="file-drop-types">
+                            Supported: PNG, JPG, PDF, TXT, PY, JS, C, HTML, CSV...
+                        </div>
+                        <input type="file" id="fileInput" accept=".txt,.md,.py,.js,.html,.css,.c,.cpp,.java,.pdf,.json,.csv,.png,.jpg,.jpeg,.gif,.bmp,.webp" style="display:none;">
+                    </div>
+                    <div class="file-selected-info" id="fileSelectedInfo" style="display:none;">
+                        <span id="fileSelectedName">📄 filename.txt</span>
+                        <button type="button" class="file-remove-btn" id="fileRemoveBtn">✕</button>
+                    </div>
+                    <button type="button" class="context-upload-btn" id="fileUploadBtn" disabled>
+                        ⬆️ Upload & Set Context
+                    </button>
+                </div>
+
+                <!-- Text Paste Tab -->
+                <div class="context-tab-content" id="tabText" style="display:none;">
+                    <textarea
+                        id="paragraphInput"
+                        class="paragraph-input"
+                        rows="8"
+                        placeholder="Yahan paragraph, notes, ya koi bhi text paste karo jiske baare mein tum questions poochna chahte ho..."
+                        maxlength="15000"
+                    ></textarea>
+                    <div class="para-char-count"><span id="paraCharCount">0</span> / 15000</div>
+                    <button type="button" class="context-upload-btn" id="paragraphSubmitBtn" disabled>
+                        ✅ Set as Context
+                    </button>
+                </div>
+
+                <!-- Status / Preview -->
+                <div class="context-preview" id="contextPreview" style="display:none;">
+                    <div class="context-preview-header">
+                        <span id="contextPreviewTitle">✅ Context Ready</span>
+                    </div>
+                    <div class="context-preview-text" id="contextPreviewText"></div>
+                    <button type="button" class="context-use-btn" id="contextUseBtn">
+                        💬 Ab Questions Poochho!
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- ================= TOAST NOTIFICATION ================= -->
+<div class="toast" id="toast" role="alert">
+    <span id="toastIcon">✓</span>
+    <span id="toastText"></span>
+</div>
+
+<script src="{{ url_for('static', filename='js/Script.js') }}"></script>
+
+</body>
+</html>
